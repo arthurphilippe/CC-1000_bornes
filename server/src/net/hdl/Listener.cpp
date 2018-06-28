@@ -5,10 +5,13 @@
 ** Listener
 */
 
-#include "Listener.hpp"
 #include <arpa/inet.h>
 #include <exception>
+#include <iostream>
 #include <stdexcept>
+
+#include "Listener.hpp"
+#include "net/Selector.hpp"
 
 namespace sys {
 
@@ -21,10 +24,10 @@ namespace sys {
 
 namespace net::hdl {
 
-Listener::Listener(int port)
-	: _sock(socket(PF_INET, SOCK_STREAM, 0)), _live(true)
+Listener::Listener(Selector &stor, int port)
+	: _stor(stor), _sock(socket(PF_INET, SOCK_STREAM, 0)), _live(true)
 {
-	if (_sock == -1 || portBind(_sock, port) ||
+	if (!_sock || _sock == -1 || portBind(_sock, port) == -1 ||
 		listen(_sock, SELECTOR_BACKLOG) == -1) {
 		sys::close(_sock);
 		throw std::runtime_error(sys::strerror(errno));
@@ -32,7 +35,10 @@ Listener::Listener(int port)
 }
 
 Listener::~Listener()
-{}
+{
+	shutdown(_sock, SHUT_RDWR);
+	sys::close(_sock);
+}
 
 int Listener::portBind(int sock, int port)
 {

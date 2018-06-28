@@ -8,6 +8,10 @@
 #ifndef IHANDLE_HPP_
 #define IHANDLE_HPP_
 
+namespace net {
+class Selector;
+}
+
 namespace net::hdl {
 
 enum class HType {
@@ -16,8 +20,6 @@ enum class HType {
 	SERVER,
 	STDIN,
 };
-
-class Selector;
 
 class IHandle {
 public:

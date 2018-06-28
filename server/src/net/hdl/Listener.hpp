@@ -16,7 +16,7 @@ constexpr auto SELECTOR_BACKLOG(30);
 
 class Listener : public IHandle {
 public:
-	Listener(int port);
+	Listener(Selector &stor, int port);
 	~Listener();
 
 	HType getType() const noexcept override
@@ -35,6 +35,7 @@ public:
 	static int portBind(int sock, int port);
 
 private:
+	Selector &_stor;
 	int _sock;
 	bool _live;
 };

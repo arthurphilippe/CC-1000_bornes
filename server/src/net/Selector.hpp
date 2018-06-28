@@ -19,6 +19,11 @@ public:
 	Selector();
 	~Selector();
 
+	void addHandle(std::unique_ptr<hdl::IHandle> &hdl)
+	{
+		_handles.push_back(std::move(hdl));
+	}
+
 private:
 	std::list<std::unique_ptr<hdl::IHandle>> _handles;
 };

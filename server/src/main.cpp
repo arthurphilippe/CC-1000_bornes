@@ -6,10 +6,14 @@
 */
 
 #include <iostream>
+#include "net/Selector.hpp"
 #include "net/hdl/Listener.hpp"
 
 int main()
 {
-	net::hdl::Listener listener(4242);
+	net::Selector stor;
+	std::unique_ptr<net::hdl::IHandle> listener(
+		new net::hdl::Listener(stor, 4242));
+	stor.addHandle(listener);
 	std::cout << "Hello Jafar" << std::endl;
 }
