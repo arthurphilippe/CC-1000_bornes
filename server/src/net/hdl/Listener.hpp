@@ -23,10 +23,13 @@ public:
 	{
 		return HType::PORT;
 	}
+	int getFd() const noexcept override
+	{
+		return _fd;
+	}
 	void onCycle() override
 	{}
-	void onRead() override
-	{}
+	void onRead() override;
 	bool live() const noexcept
 	{
 		return _live;
@@ -36,7 +39,7 @@ public:
 
 private:
 	Selector &_stor;
-	int _sock;
+	int _fd;
 	bool _live;
 };
 
