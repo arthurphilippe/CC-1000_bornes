@@ -22,7 +22,7 @@ OBJS		=	$(SRCS:.cpp=.o)
 
 TEST		=	unit_tests.out
 
-SRCS_TEST	=
+SRCS_TEST	=	tests/Selector.cpp
 
 SRCS_TEST	+=	$(OBJS)
 

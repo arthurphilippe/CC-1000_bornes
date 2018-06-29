@@ -15,27 +15,33 @@
 
 namespace net {
 
+constexpr auto SELECTOR_BACKLOG(30);
+
 class Selector {
 public:
 	Selector();
+	Selector(const Selector &) = delete;
 	~Selector();
 
 	void addHandle(std::unique_ptr<hdl::IHandle> &hdl)
 	{
 		_handles.push_back(std::move(hdl));
 	}
-	void loop()
+	bool run()
 	{
-		while (_live) {
+		if (_live) {
 			_setFileDescriptors();
 			_select();
 			_readOnActiveHandles();
 		}
+		return (_live);
 	}
-	void setLive(bool status)
+	void loop()
 	{
-		_live = status;
+		while (run())
+			;
 	}
+	void setLive(bool status) { _live = status; }
 
 private:
 	void _select();

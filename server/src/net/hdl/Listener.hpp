@@ -12,8 +12,6 @@
 
 namespace net::hdl {
 
-constexpr auto SELECTOR_BACKLOG(30);
-
 class Listener : public IHandle {
 public:
 	Listener(Selector &stor, int port);
