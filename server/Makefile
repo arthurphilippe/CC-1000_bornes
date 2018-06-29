@@ -76,4 +76,4 @@ artifacts_clean:
 
 re: fclean all
 
-.PHONY: all clean fclean re debug tests artifacts_clean ui
+.PHONY: all clean fclean re debug tests artifacts_clean

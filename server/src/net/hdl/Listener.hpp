@@ -30,7 +30,7 @@ public:
 	void onCycle() override
 	{}
 	void onRead() override;
-	bool live() const noexcept
+	bool live() const noexcept override
 	{
 		return _live;
 	}

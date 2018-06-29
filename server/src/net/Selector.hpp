@@ -39,7 +39,7 @@ public:
 
 private:
 	void _select();
-	void _setFileDescriptors();
+	void _setFileDescriptors() noexcept;
 	void _readOnActiveHandles();
 	std::list<std::unique_ptr<hdl::IHandle>> _handles;
 

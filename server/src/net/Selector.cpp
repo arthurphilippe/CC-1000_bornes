@@ -28,7 +28,7 @@ void Selector::_select()
 	}
 }
 
-void Selector::_setFileDescriptors()
+void Selector::_setFileDescriptors() noexcept
 {
 	_highestSetFd = 0;
 	for (auto &it : _handles) {
