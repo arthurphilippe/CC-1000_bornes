@@ -14,7 +14,7 @@ int main()
 	net::Selector stor;
 	std::unique_ptr<net::hdl::IHandle> listener(
 		new net::hdl::Listener(stor, 4242));
-	stor.addHandle(listener);
+	stor.registerHandle(listener);
 	stor.loop();
 	std::cout << "Hello Jafar" << std::endl;
 }

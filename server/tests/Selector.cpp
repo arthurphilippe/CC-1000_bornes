@@ -54,7 +54,7 @@ Test(Selector, 1_basic, .timeout = 2)
 	std::unique_ptr<net::hdl::IHandle> hdl(dumbhdl);
 
 	cr_assert(dumbhdl);
-	stor.addHandle(hdl);
+	stor.registerHandle(hdl);
 	dprintf(dumbhdl->_filedes[1], "hi\n");
 
 	cr_assert_eq(stor.run(), true);
@@ -69,7 +69,7 @@ Test(Selector, 2_invalid_fd, .timeout = 2)
 	std::unique_ptr<net::hdl::IHandle> hdl(dumbhdl);
 
 	cr_assert(dumbhdl);
-	stor.addHandle(hdl);
+	stor.registerHandle(hdl);
 
 	dumbhdl->_filedes[0] = -1;
 	cr_assert_throw(stor.run(), std::runtime_error);

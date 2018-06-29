@@ -23,7 +23,7 @@ public:
 	Selector(const Selector &) = delete;
 	~Selector();
 
-	void addHandle(std::unique_ptr<hdl::IHandle> &hdl)
+	void registerHandle(std::unique_ptr<hdl::IHandle> &hdl)
 	{
 		_handles.push_back(std::move(hdl));
 	}
