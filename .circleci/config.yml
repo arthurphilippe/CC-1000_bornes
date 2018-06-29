@@ -39,7 +39,7 @@ jobs:
       - checkout
       - run:
           name: Build Project Using clang
-          command: make CC=clang++
+          command: make CXX=clang++
           working_directory: ~/project/server
 
   server_epitest:
