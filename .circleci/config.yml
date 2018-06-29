@@ -1,0 +1,95 @@
+version: 2
+jobs:
+  server_test:
+    docker:
+      - image: arthurphilippe/epitech-c-cpp-plain
+    steps:
+      - checkout
+      - run:
+          name: Build Project
+          command: make
+          working_directory: ~/project/server
+      - run:
+          name: Build Unit Tests Suites
+          command: make tests
+          working_directory: ~/project/server
+      - run:
+          name: Tidy up
+          command: make clean
+          working_directory: ~/project/server
+      - run:
+          name: Unit Tests Execution
+          command: ./unit_tests.out -j 1 --verbose --xml=tests/results.xml --always-succeed
+          working_directory: ~/project/server
+      - store_test_results:
+          path: .
+          working_directory: ~/project/server
+      - run:
+          name: Code Coverage - Processing
+          command: ./tests/coverage.sh html
+          working_directory: ~/project/server
+      - store_artifacts:
+          path: ~/project/server/coverage
+          destination: coverage
+
+  server_build_clang:
+    docker:
+      - image: arthurphilippe/clang
+    steps:
+      - checkout
+      - run:
+          name: Build Project Using clang
+          command: make CC=clang CPPFLAGS=-W\ -Wextra\ -Wall\ -Werror\ -Iinclude/
+          working_directory: ~/project/server
+
+  player_build_clang:
+    docker:
+      - image: arthurphilippe/clang
+    steps:
+      - checkout
+      - run:
+          name: Build Project Using clang
+          command: make CXX=clang++
+          working_directory: ~/project/player
+
+  server_epitest:
+    docker:
+      - image: epitechcontent/epitest-docker
+    steps:
+      - checkout
+      - run:
+          name: Build Project
+          command: make -j 4
+          working_directory: ~/project/server
+      - run:
+          name: Build Unit Tests Suites
+          command: make tests -j 4
+          working_directory: ~/project/server
+      - run:
+          name: Tidy up
+          command: make clean
+          working_directory: ~/project/server
+      - run:
+          name: Unit Tests Execution
+          command: ./unit_tests.out -j 1 --xml=tests/results.xml --always-succeed
+          working_directory: ~/project/server
+      - store_test_results:
+          path: .
+          working_directory: ~/project/server
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - server_test
+      - server_build_clang
+  planned:
+    triggers:
+      - schedule:
+          cron: "0 21 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - server_epitest
