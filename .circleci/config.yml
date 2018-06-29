@@ -39,18 +39,8 @@ jobs:
       - checkout
       - run:
           name: Build Project Using clang
-          command: make CC=clang CPPFLAGS=-W\ -Wextra\ -Wall\ -Werror\ -Iinclude/
+          command: make CC=clang++
           working_directory: ~/project/server
-
-  player_build_clang:
-    docker:
-      - image: arthurphilippe/clang
-    steps:
-      - checkout
-      - run:
-          name: Build Project Using clang
-          command: make CXX=clang++
-          working_directory: ~/project/player
 
   server_epitest:
     docker:
