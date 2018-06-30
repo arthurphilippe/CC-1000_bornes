@@ -54,7 +54,7 @@ tests_run: CPPFLAGS += --coverage -I../src/
 tests_run: LDFLAGS += -lgcov
 tests_run: $(TEST)
 	@./$(TEST) --verbose -j 1 --always-succeed
-#	@cd tests/ && find -name "*.gcda" -delete -o -name "*.gcno" -delete
+	@cd tests/ && find -name "*.gcda" -delete -o -name "*.gcno" -delete
 	@cd src/ && rm -f main.gcda main.gcno
 
 $(NAME): $(OBJ_MAIN) $(OBJS)
