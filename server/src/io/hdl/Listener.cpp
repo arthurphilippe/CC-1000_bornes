@@ -15,6 +15,7 @@
 #include <system_error>
 #include <unistd.h>
 #include "io/Selector.hpp"
+#include "io/hdl/Client.hpp"
 
 namespace io::hdl {
 
@@ -42,9 +43,10 @@ void Listener::onRead()
 
 	socket = accept(_fd, (struct sockaddr *) &sin, &sin_len);
 	if (socket == -1) throw std::runtime_error(strerror(errno));
-	dprintf(socket, "%s\n", "hi, this socket will not stay open.");
-	close(socket);
-	_stor.setLive(false);
+	dprintf(socket, "%s\n", "Welcome");
+	std::unique_ptr<IHandle> tmpHdl(new io::hdl::Client(_stor, socket));
+	if (!tmpHdl) close(socket);
+	_stor.registerHandle(tmpHdl);
 }
 
 int Listener::portBind(int sock, int port)

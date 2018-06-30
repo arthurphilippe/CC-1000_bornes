@@ -17,14 +17,14 @@ namespace io::hdl {
 class Client : public IHandle {
 public:
 	Client(Selector &stor, int fd) : _stor(stor), _fd(fd), _live(true) {}
-	~Client() {}
+	~Client();
 
 	virtual HType getType() const noexcept override
 	{
 		return HType::CLIENT;
 	}
 	virtual int getFd() const noexcept override { return _fd; }
-	virtual void onCycle() override {}
+	virtual void onCycle() override;
 	virtual void onRead() override;
 	virtual bool live() const noexcept override { return _live; }
 

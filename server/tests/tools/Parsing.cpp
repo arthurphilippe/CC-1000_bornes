@@ -48,15 +48,55 @@ Test(Parsing, list_filling)
 		"baby\nI'll be usin' it for the rest of my life\n");
 	Parsing::fillList(substrs, str, '\n');
 	cr_expect(substrs.size() == 5);
+	cr_assert_not(substrs.empty());
 	cr_expect_eq(substrs.front(), "patate");
 	substrs.pop_front();
+	cr_assert_not(substrs.empty());
 	cr_expect_eq(substrs.front(), "Don't Blame Me Love Me Make Me Crazy");
 	substrs.pop_front();
 	cr_expect_eq(
 		substrs.front(), "If it doesn't you ain't doin' it right");
 	substrs.pop_front();
+	cr_assert_not(substrs.empty());
 	cr_expect_eq(substrs.front(), "Lord, save me, my drug is my baby");
 	substrs.pop_front();
 	cr_expect_eq(
 		substrs.front(), "I'll be usin' it for the rest of my life");
+}
+
+Test(Parsing, list_filling_multi)
+{
+	std::list<std::string> substrs;
+	substrs.push_back("patate");
+	std::string str("\nFirst\nSecond\nThird\n\r\nFourth\nFifth\n\n");
+	Parsing::fillList(substrs, str, std::string{"\n\r"});
+	cr_expect(substrs.size() == 6, "size is %ld", substrs.size());
+	cr_assert_not(substrs.empty());
+	cr_expect_eq(substrs.front(), "patate");
+	substrs.pop_front();
+	cr_assert_not(substrs.empty());
+	cr_expect_eq(substrs.front(), "First");
+	substrs.pop_front();
+	cr_assert_not(substrs.empty());
+	cr_expect_eq(substrs.front(), "Second");
+	substrs.pop_front();
+	cr_assert_not(substrs.empty());
+	cr_expect_eq(substrs.front(), "Third");
+	substrs.pop_front();
+	cr_assert_not(substrs.empty());
+	cr_expect_eq(substrs.front(), "Fourth");
+	substrs.pop_front();
+	cr_assert_not(substrs.empty());
+	cr_expect_eq(substrs.front(), "Fifth");
+}
+
+Test(Parsing, list_filling_multi_whole)
+{
+	std::list<std::string> substrs;
+	substrs.push_back("patate");
+	std::string str("voiture");
+	Parsing::fillList(substrs, str, std::string{"\n\r"});
+	cr_expect(substrs.size() == 2, "size is %ld", substrs.size());
+	cr_assert_not(substrs.empty());
+	cr_expect_eq(substrs.back(), "voiture");
 }

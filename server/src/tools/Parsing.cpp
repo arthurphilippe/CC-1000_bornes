@@ -79,4 +79,23 @@ void Parsing::fillList(
 	}
 }
 
+void Parsing::fillList(std::list<std::string> &list, const std::string &str,
+	const std::string &spacers)
+{
+	auto offsetpos(std::string::npos);
+	std::size_t i(str.find_first_not_of(spacers, 0));
+
+	while (i != std::string::npos && str[i]) {
+		offsetpos = str.find_first_of(spacers, i);
+		if (offsetpos != std::string::npos) {
+			list.push_back(str.substr(i, offsetpos - i));
+			i = offsetpos + 1;
+		} else {
+			list.push_back(str);
+			i += str.size();
+		}
+		i = str.find_first_not_of(spacers, i);
+	}
+}
+
 } // namespace tools
