@@ -8,6 +8,8 @@
 #ifndef CLIENT_HPP_
 #define CLIENT_HPP_
 
+#include <list>
+#include <string>
 #include "io/hdl/IHandle.hpp"
 
 namespace io::hdl {
@@ -30,6 +32,7 @@ protected:
 	Selector &_stor;
 	int _fd;
 	bool _live;
+	std::list<std::string> _receivedMsgs;
 };
 
 } // namespace io::hdl

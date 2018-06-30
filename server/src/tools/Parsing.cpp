@@ -58,4 +58,25 @@ std::vector<std::string> Parsing::createVectorString(
 	return vec;
 }
 
+void Parsing::fillList(
+	std::list<std::string> &list, std::string string, char delim)
+{
+	int total = std::count(string.begin(), string.end(), delim);
+
+	if (total) {
+		while (std::count(string.begin(), string.end(), delim) >= 1) {
+			unsigned long i = string.find(delim);
+			if (i != std::string::npos) {
+				std::string tmp = string.substr(0, i);
+				list.push_back(tmp);
+				string =
+					string.substr(i + 1, string.length());
+			}
+		}
+		if (string.length() > 0) {
+			list.push_back(string);
+		}
+	}
+}
+
 } // namespace tools

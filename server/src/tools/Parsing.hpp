@@ -8,6 +8,7 @@
 #ifndef PARSERENGINE_HPP_
 #define PARSERENGINE_HPP_
 
+#include <list>
 #include <string>
 #include <vector>
 
@@ -19,6 +20,8 @@ public:
 	static std::string getStringFromArgNb(std::string string, int nb);
 	static std::vector<std::string> createVectorString(
 		std::string string, char delim);
+	static void fillList(
+		std::list<std::string> &list, std::string str, char spacer);
 	static std::string extractFirstString(
 		std::string &string, char delim = '\n');
 
