@@ -14,9 +14,9 @@
 #include <sys/socket.h>
 #include <system_error>
 #include <unistd.h>
-#include "net/Selector.hpp"
+#include "io/Selector.hpp"
 
-namespace net::hdl {
+namespace io::hdl {
 
 Listener::Listener(Selector &stor, int port)
 	: _stor(stor), _fd(socket(PF_INET, SOCK_STREAM, 0)), _live(true)
@@ -41,8 +41,7 @@ void Listener::onRead()
 	socklen_t sin_len = sizeof(sin);
 
 	socket = accept(_fd, (struct sockaddr *) &sin, &sin_len);
-	if (socket == -1)
-		throw std::runtime_error(strerror(errno));
+	if (socket == -1) throw std::runtime_error(strerror(errno));
 	dprintf(socket, "%s\n", "hi, this socket will not stay open.");
 	close(socket);
 	_stor.setLive(false);
@@ -58,4 +57,4 @@ int Listener::portBind(int sock, int port)
 	return (bind(sock, (struct sockaddr *) &sin, sizeof(sin)));
 }
 
-} // namespace net::hdl
+} // namespace io::hdl

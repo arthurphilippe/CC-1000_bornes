@@ -9,13 +9,11 @@
 #include <stdexcept>
 #include <string.h>
 
-namespace net {
+namespace io {
 
-Selector::Selector() : _live(true)
-{}
+Selector::Selector() : _live(true) {}
 
-Selector::~Selector()
-{}
+Selector::~Selector() {}
 
 void Selector::_select()
 {
@@ -34,8 +32,7 @@ void Selector::_setFileDescriptors() noexcept
 	for (auto &it : _handles) {
 		auto fd = it->getFd();
 		FD_SET(fd, &_fdSet);
-		if (_highestSetFd < fd)
-			_highestSetFd = fd;
+		if (_highestSetFd < fd) _highestSetFd = fd;
 	}
 }
 
@@ -43,10 +40,9 @@ void Selector::_readOnActiveHandles()
 {
 	for (auto &it : _handles) {
 		auto fd = it->getFd();
-		if (FD_ISSET(fd, &_fdSet))
-			it->onRead();
+		if (FD_ISSET(fd, &_fdSet)) it->onRead();
 		it->onCycle();
 	}
 }
 
-} // namespace net
+} // namespace io

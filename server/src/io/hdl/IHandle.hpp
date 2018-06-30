@@ -8,14 +8,15 @@
 #ifndef IHANDLE_HPP_
 #define IHANDLE_HPP_
 
-namespace net {
+namespace io {
 class Selector;
 }
 
-namespace net::hdl {
+namespace io::hdl {
 
 enum class HType {
 	PORT,
+	CLIENT,
 	PLAYER,
 	SERVER,
 	STDIN,
@@ -31,6 +32,6 @@ public:
 	virtual bool live() const noexcept = 0;
 };
 
-} // namespace net::hdl
+} // namespace io::hdl
 
 #endif /* !IHANDLE_HPP_ */

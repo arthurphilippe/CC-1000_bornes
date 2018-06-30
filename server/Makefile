@@ -13,8 +13,9 @@ RM		=	rm -vf
 
 MAIN		=	src/main.cpp
 
-SRCS		=	src/net/Selector.cpp		\
-			src/net/hdl/Listener.cpp	\
+SRCS		=	src/io/Selector.cpp	\
+			src/io/hdl/Listener.cpp	\
+			src/io/hdl/Client.cpp	\
 
 OBJ_MAIN	=	$(MAIN:.cpp=.o)
 

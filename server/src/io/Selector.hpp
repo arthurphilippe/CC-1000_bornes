@@ -13,7 +13,7 @@
 #include <sys/select.h>
 #include "hdl/IHandle.hpp"
 
-namespace net {
+namespace io {
 
 constexpr auto SELECTOR_BACKLOG(30);
 
@@ -27,7 +27,7 @@ public:
 	{
 		_handles.push_back(std::move(hdl));
 	}
-	bool run()
+	virtual bool run()
 	{
 		if (_live) {
 			_setFileDescriptors();
@@ -36,12 +36,12 @@ public:
 		}
 		return (_live);
 	}
-	void loop()
+	virtual void loop()
 	{
 		while (run())
 			;
 	}
-	void setLive(bool status) { _live = status; }
+	virtual void setLive(bool status) noexcept { _live = status; }
 
 private:
 	void _select();
@@ -54,6 +54,6 @@ private:
 	fd_set _fdSet;
 };
 
-} // namespace net
+} // namespace io
 
 #endif /* !SELECTOR_HPP_ */
