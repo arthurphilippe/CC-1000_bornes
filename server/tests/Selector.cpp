@@ -5,17 +5,17 @@
 ** Selector
 */
 
-#include "net/Selector.hpp"
+#include "io/Selector.hpp"
 #include <criterion/assert.h>
 #include <criterion/criterion.h>
-#include "net/hdl/IHandle.hpp"
+#include "io/hdl/IHandle.hpp"
 #include "unistd.h"
 
-namespace net::hdl {
+namespace io::hdl {
 
 class PipeHandle : public IHandle {
 public:
-	PipeHandle(net::Selector &stor) : _stor(stor), _live(true)
+	PipeHandle(io::Selector &stor) : _stor(stor), _live(true)
 	{
 		if (pipe(_filedes) == -1)
 			throw std::runtime_error(strerror(errno));
@@ -40,18 +40,18 @@ public:
 	}
 	bool live() const noexcept override { return _live; }
 
-	net::Selector &_stor;
+	io::Selector &_stor;
 	bool _live;
 	int _filedes[2];
 };
 
-} // namespace net::hdl
+} // namespace io::hdl
 
 Test(Selector, 1_basic, .timeout = 2)
 {
-	net::Selector stor;
-	auto *dumbhdl = new net::hdl::PipeHandle(stor);
-	std::unique_ptr<net::hdl::IHandle> hdl(dumbhdl);
+	io::Selector stor;
+	auto *dumbhdl = new io::hdl::PipeHandle(stor);
+	std::unique_ptr<io::hdl::IHandle> hdl(dumbhdl);
 
 	cr_assert(dumbhdl);
 	stor.registerHandle(hdl);
@@ -64,9 +64,9 @@ Test(Selector, 1_basic, .timeout = 2)
 
 Test(Selector, 2_invalid_fd, .timeout = 2)
 {
-	net::Selector stor;
-	auto *dumbhdl = new net::hdl::PipeHandle(stor);
-	std::unique_ptr<net::hdl::IHandle> hdl(dumbhdl);
+	io::Selector stor;
+	auto *dumbhdl = new io::hdl::PipeHandle(stor);
+	std::unique_ptr<io::hdl::IHandle> hdl(dumbhdl);
 
 	cr_assert(dumbhdl);
 	stor.registerHandle(hdl);
