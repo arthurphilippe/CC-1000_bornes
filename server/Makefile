@@ -16,6 +16,7 @@ MAIN		=	src/main.cpp
 SRCS		=	src/io/Selector.cpp	\
 			src/io/hdl/Listener.cpp	\
 			src/io/hdl/Client.cpp	\
+			src/tools/Parsing.cpp	\
 
 OBJ_MAIN	=	$(MAIN:.cpp=.o)
 
@@ -23,7 +24,8 @@ OBJS		=	$(SRCS:.cpp=.o)
 
 TEST		=	unit_tests.out
 
-SRCS_TEST	=	tests/Selector.cpp
+SRCS_TEST	=	tests/Selector.cpp	\
+			tests/tools/Parsing.cpp
 
 SRCS_TEST	+=	$(OBJS)
 
