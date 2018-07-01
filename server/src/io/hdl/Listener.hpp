@@ -1,5 +1,5 @@
 /*
-** EPITECH PROJECT, 2018
+** COBRA CODING CLUB PROJECT
 ** server
 ** File description:
 ** listener

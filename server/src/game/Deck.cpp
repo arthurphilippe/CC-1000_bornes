@@ -1,5 +1,5 @@
 /*
-** EPITECH PROJECT, 2018
+** COBRA CODING CLUB PROJECT
 ** server
 ** File description:
 ** Deck
@@ -31,7 +31,22 @@ const std::unordered_map<Card, unsigned int> Deck::__cardDistribution{
 	{Card::Dst200kms, 4},
 };
 
-Deck::Deck() : _remainToDistribute(__cardDistribution) {}
+Deck::Deck()
+	: _remainToDistribute(__cardDistribution), _rd(), _generator(_rd())
+{
+	while (!_remainToDistribute.empty()) {
+		auto idx = _generator();
+		idx %= static_cast<unsigned int>(Card::COUNT);
+		auto card = static_cast<Card>(idx);
+		if (_remainToDistribute.find(card) !=
+			_remainToDistribute.end()) {
+			_cards.push_back(card);
+			_remainToDistribute[card] -= 1;
+			if (!_remainToDistribute[card])
+				_remainToDistribute.erase(card);
+		}
+	}
+}
 
 Deck::~Deck() {}
 

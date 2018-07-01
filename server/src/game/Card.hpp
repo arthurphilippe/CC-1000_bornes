@@ -1,5 +1,5 @@
 /*
-** EPITECH PROJECT, 2018
+** COBRA CODING CLUB PROJECT
 ** server
 ** File description:
 ** Card
@@ -9,7 +9,7 @@
 #define CARD_HPP_
 
 namespace game {
-enum class Card {
+enum class Card : unsigned int {
 	AttCarCrash,
 	AttGasOutage,
 	AttFlatTire,
@@ -32,6 +32,8 @@ enum class Card {
 	Dst75kms,
 	Dst100kms,
 	Dst200kms,
+
+	COUNT,
 };
 }
 #endif /* !CARD_HPP_ */

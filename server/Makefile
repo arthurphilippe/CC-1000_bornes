@@ -1,5 +1,5 @@
 ##
-## EPITECH PROJECT, 2018
+## COBRA CODING CLUB PROJECT
 ## nanotekspice
 ## File description:
 ## Makefile
@@ -28,6 +28,7 @@ TEST		=	unit_tests.out
 SRCS_TEST	=	tests/Selector.cpp	\
 			tests/tools/Parsing.cpp	\
 			tests/io/hdl/Client.cpp	\
+			tests/game/Deck.cpp	\
 
 SRCS_TEST	+=	$(OBJS)
 
