@@ -8,6 +8,9 @@
 #ifndef IHANDLE_HPP_
 #define IHANDLE_HPP_
 
+#include <functional>
+#include "io/hdl/IMsgProcessor.hpp"
+
 namespace io {
 class Selector;
 }
@@ -31,6 +34,9 @@ public:
 	virtual void onRead() = 0;
 	virtual bool live() const noexcept = 0;
 };
+
+// using MsgProcessor =
+// 	std::function<void(IHandle &hdl, const std::string &msg)>;
 
 } // namespace io::hdl
 

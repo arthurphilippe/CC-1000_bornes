@@ -18,7 +18,12 @@ void Client::onCycle()
 {
 	while (!_receivedMsgs.empty()) {
 		if (_receivedMsgs.front() == "quit") _stor.setLive(false);
+		if (_msgProcessor && !_msgProcessor->live())
+			_msgProcessor.reset();
 		dprintf(_fd, "echo: %s\n", _receivedMsgs.front().c_str());
+		if (_msgProcessor && _msgProcessor->live())
+			_msgProcessor->processMsg(
+				*this, _receivedMsgs.front());
 		_receivedMsgs.pop_front();
 	}
 }

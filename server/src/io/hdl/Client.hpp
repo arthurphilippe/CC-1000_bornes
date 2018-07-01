@@ -9,8 +9,10 @@
 #define CLIENT_HPP_
 
 #include <list>
+#include <memory>
 #include <string>
 #include "io/hdl/IHandle.hpp"
+#include "io/hdl/IMsgProcessor.hpp"
 
 namespace io::hdl {
 
@@ -27,9 +29,14 @@ public:
 	virtual void onCycle() override;
 	virtual void onRead() override;
 	virtual bool live() const noexcept override { return _live; }
+	void setMsgProcessor(std::shared_ptr<IMsgProcessor> &proc)
+	{
+		_msgProcessor = proc;
+	}
 
 protected:
 	Selector &_stor;
+	std::shared_ptr<IMsgProcessor> _msgProcessor;
 	int _fd;
 	bool _live;
 	std::list<std::string> _receivedMsgs;
