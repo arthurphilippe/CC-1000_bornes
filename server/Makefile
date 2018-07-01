@@ -17,6 +17,7 @@ SRCS		=	src/io/Selector.cpp	\
 			src/io/hdl/Listener.cpp	\
 			src/io/hdl/Client.cpp	\
 			src/tools/Parsing.cpp	\
+			src/game/Deck.cpp
 
 OBJ_MAIN	=	$(MAIN:.cpp=.o)
 
