@@ -9,6 +9,7 @@
 #define CARD_HPP_
 
 namespace game {
+
 enum class Card : unsigned int {
 	AttCarCrash,
 	AttGasOutage,
