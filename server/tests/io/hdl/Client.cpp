@@ -78,12 +78,13 @@ public:
 	DumbProcessor() : _live(true) {}
 	~DumbProcessor() {}
 
-	void processMsg(io::hdl::Client &handle, const std::string &msg)
+	void processMsg(
+		io::hdl::Client &handle, const std::string &msg) override
 	{
 		(void) handle;
 		_processed.push_back(msg);
 	}
-	bool live() { return _live; }
+	bool live() const noexcept override { return _live; }
 
 	bool _live;
 	std::list<std::string> _processed;

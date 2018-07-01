@@ -16,7 +16,7 @@ class IMsgProcessor {
 public:
 	virtual ~IMsgProcessor() = default;
 	virtual void processMsg(Client &handle, const std::string &msg) = 0;
-	virtual bool live() = 0;
+	virtual bool live() const noexcept = 0;
 };
 
 } // namespace io::hdl
