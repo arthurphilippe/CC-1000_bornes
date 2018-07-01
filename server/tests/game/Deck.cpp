@@ -17,7 +17,10 @@ Test(Deck, 1_cards)
 	unsigned int countRedLight(0);
 	unsigned int count75kms(0);
 
+	cr_expect_eq(cards.size(), 106);
+
 	for (const auto &card : cards) {
+		cr_log_info("card type: %d", static_cast<unsigned int>(card));
 		if (card == game::Card::AttRedLight) countRedLight += 1;
 		if (card == game::Card::Dst75kms) count75kms += 1;
 	}
