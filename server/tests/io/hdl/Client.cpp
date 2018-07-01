@@ -59,6 +59,7 @@ Test(ioHdlClient, 2_getters)
 
 	cr_assert_eq(client.getFd(), filedes[0]);
 	cr_assert_eq(client.live(), true);
+	cr_assert_eq(client.getType(), io::hdl::HType::CLIENT);
 
 	dprintf(filedes[1], "%s",
 		"kappa\n\rwa\nkawaaaaaaaaaaaaaaaaaaaaaaiiiiiiiiiiiiiiiii\n"
