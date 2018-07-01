@@ -18,7 +18,21 @@ namespace io::hdl {
 
 class Client : public IHandle {
 public:
-	Client(Selector &stor, int fd) : _stor(stor), _fd(fd), _live(true) {}
+	Client(Selector &stor, int fd)
+		: id(__id++),
+		  _stor(stor),
+		  _msgProcessor(nullptr),
+		  _fd(fd),
+		  _live(true)
+	{}
+	Client(Selector &stor, std::shared_ptr<IMsgProcessor> &proc, int fd)
+		: id(__id++),
+		  _stor(stor),
+		  _msgProcessor(proc),
+		  _fd(fd),
+		  _live(true)
+	{}
+
 	~Client();
 
 	virtual HType getType() const noexcept override
@@ -33,6 +47,7 @@ public:
 	{
 		_msgProcessor = proc;
 	}
+	const unsigned long id;
 
 protected:
 	Selector &_stor;
@@ -40,6 +55,8 @@ protected:
 	int _fd;
 	bool _live;
 	std::list<std::string> _receivedMsgs;
+
+	static unsigned long __id;
 };
 
 } // namespace io::hdl

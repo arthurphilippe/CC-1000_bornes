@@ -15,6 +15,10 @@
 class DumbClient : public io::hdl::Client {
 public:
 	DumbClient(io::Selector &stor, int fd) : Client(stor, fd) {}
+	DumbClient(io::Selector &stor,
+		std::shared_ptr<io::hdl::IMsgProcessor> &proc, int fd)
+		: Client(stor, proc, fd)
+	{}
 	std::list<std::string> &getMsgs() { return _receivedMsgs; }
 	void setFd(int fd) { _fd = fd; }
 };
@@ -96,10 +100,9 @@ Test(ioHdlClient, 3_msgProcessor)
 	int filedes[2];
 
 	if (pipe(filedes) == -1) cr_assert_fail("failed to pipe: errno %d");
-	DumbClient client(stor, filedes[0]);
 	auto *dproc = new DumbProcessor;
 	std::shared_ptr<io::hdl::IMsgProcessor> proc(dproc);
-	client.setMsgProcessor(proc);
+	DumbClient client(stor, proc, filedes[0]);
 
 	dprintf(filedes[1], "%s",
 		"kappa\n\rwa\nkawaaaaaaaaaaaaaaaaaaaaaaiiiiiiiiiiiiiiiii\n"

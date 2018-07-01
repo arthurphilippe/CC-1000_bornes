@@ -8,6 +8,8 @@
 #ifndef IMSGPROCESSOR_HPP_
 #define IMSGPROCESSOR_HPP_
 
+#include <string>
+
 namespace io::hdl {
 
 class Client;

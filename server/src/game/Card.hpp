@@ -35,6 +35,7 @@ enum class Card : unsigned int {
 	Dst200kms,
 
 	COUNT,
+	NONE,
 };
 }
 #endif /* !CARD_HPP_ */

@@ -12,6 +12,8 @@
 
 namespace io::hdl {
 
+unsigned long Client::__id(0);
+
 Client::~Client() { close(_fd); }
 
 void Client::onCycle()
