@@ -28,7 +28,7 @@ void Client::onRead()
 	char buff[513];
 	int r = read(this->_fd, buff, 512);
 	buff[r] = 0;
-	tools::Parsing::fillList(_receivedMsgs, buff, '\n');
+	tools::Parsing::fillList(_receivedMsgs, buff, "\n\r");
 }
 
 } // namespace io::hdl

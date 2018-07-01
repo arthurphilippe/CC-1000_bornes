@@ -25,7 +25,8 @@ OBJS		=	$(SRCS:.cpp=.o)
 TEST		=	unit_tests.out
 
 SRCS_TEST	=	tests/Selector.cpp	\
-			tests/tools/Parsing.cpp
+			tests/tools/Parsing.cpp	\
+			tests/io/hdl/Client.cpp	\
 
 SRCS_TEST	+=	$(OBJS)
 
