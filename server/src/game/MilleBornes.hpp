@@ -31,7 +31,8 @@ public:
 	};
 	MilleBornes();
 	~MilleBornes();
-	void processMsg(io::hdl::Client &handle, const std::string &msg);
+	void processMsg(
+		io::hdl::Client &handle, const std::string &msg) override;
 	bool live() const noexcept override { return _live; }
 	bool ready() const noexcept { return (_players.size() >= 2); }
 	bool full() const noexcept { return (_players.size() >= 6); }
