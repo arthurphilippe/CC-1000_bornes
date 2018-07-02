@@ -10,11 +10,11 @@
 namespace game {
 
 const std::unordered_map<Card, unsigned int> Deck::__cardDistribution{
-	{Card::AttCarCrash, 3},
-	{Card::AttGasOutage, 3},
-	{Card::AttFlatTire, 3},
-	{Card::AttSpeedLimit, 4},
-	{Card::AttRedLight, 5},
+	{Card::HazCarCrash, 3},
+	{Card::HazGasOutage, 3},
+	{Card::HazFlatTire, 3},
+	{Card::HazSpeedLimit, 4},
+	{Card::HazRedLight, 5},
 	{Card::DefRepair, 6},
 	{Card::DefGas, 6},
 	{Card::DefSpareWheel, 6},

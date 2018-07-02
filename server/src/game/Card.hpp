@@ -11,11 +11,11 @@
 namespace game {
 
 enum class Card : unsigned int {
-	AttCarCrash,
-	AttGasOutage,
-	AttFlatTire,
-	AttSpeedLimit,
-	AttRedLight,
+	HazCarCrash,
+	HazGasOutage,
+	HazFlatTire,
+	HazSpeedLimit,
+	HazRedLight,
 
 	DefRepair,
 	DefGas,

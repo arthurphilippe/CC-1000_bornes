@@ -52,6 +52,7 @@ debug: CPPFLAGS += -ggdb
 debug: $(NAME)
 
 tests: CXX=g++
+tests: CPPFLAGS += -ggdb
 tests: $(TEST)
 
 tests_run: CXX=g++

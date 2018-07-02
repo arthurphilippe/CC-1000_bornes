@@ -23,9 +23,9 @@ class MilleBornes : public io::hdl::IMsgProcessor {
 public:
 	struct Player {
 		std::array<Card, 6> hand;
-		unsigned int distance;
 		io::hdl::Client &client;
-		Card incident;
+		unsigned int distance;
+		Card hazard;
 		bool speedlimited;
 		bool light;
 	};
@@ -36,8 +36,23 @@ public:
 	bool ready() const noexcept { return (_players.size() >= 2); }
 	bool full() const noexcept { return (_players.size() >= 6); }
 
+	bool useCard(Player &pl, Card &card);
+	bool useCard(Player &pl, Card &card, Player &foe);
+	bool useDefense(Player &pl, Card &card);
+	bool useDist(Player &pl, Card &card);
+	bool useHazard(Player &pl, Card &card, Player &foe);
+
 private:
-	bool _controlAccess(io::hdl::Client &handle);
+	bool _controlAccess(io::hdl::Client &handle, Player *&pl);
+
+	Card &_playerSelectCard(Player &pl, Card selection)
+	{
+		for (auto &card : pl.hand) {
+			if (card == selection) return card;
+		}
+		throw;
+	}
+	Player &_targetPlayer(unsigned long id);
 
 	Deck _deck;
 	std::list<Player> _players;
