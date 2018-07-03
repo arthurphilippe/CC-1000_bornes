@@ -294,15 +294,28 @@ Test(MilleBornes, runCmd)
 
 	pl.hand[2] = game::Card::HazFlatTire;
 	splitmsg[1] = "2";
-	splitmsg.push_back("2");
+	splitmsg.push_back("168");
+	cr_expect_none_throw(game->runCmd(pl, splitmsg));
+	cr_expect_neq(pl.hand[2], game::Card::NONE);
+
+	splitmsg[1] = "2";
+	splitmsg[2] = "patate bouree";
+	cr_expect_none_throw(game->runCmd(pl, splitmsg));
+	cr_expect_neq(pl.hand[2], game::Card::NONE);
+
+	pl.hand[2] = game::Card::HazFlatTire;
+	splitmsg[1] = "2";
+	splitmsg[2] = "2";
 	game->runCmd(pl, splitmsg);
 	cr_expect_eq(pl.hand[2], game::Card::NONE);
 
 	pl.hand[3] = game::Card::SpeAcePilot;
 	splitmsg[1] = "3";
 	splitmsg.pop_back();
-	splitmsg[0] = "discard";
 	game->runCmd(pl, splitmsg);
 	cr_expect_eq(pl.hand[3], game::Card::NONE);
 	cr_expect_eq(pl.hand[2], game::Card::NONE);
+	splitmsg[1] = "qsjdfhnlsjrhgs";
+	splitmsg[0] = "5644sqdf";
+	cr_expect_none_throw(game->runCmd(pl, splitmsg));
 }
