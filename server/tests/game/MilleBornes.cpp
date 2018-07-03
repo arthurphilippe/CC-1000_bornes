@@ -104,6 +104,18 @@ Test(MilleBornes, useDist)
 	cr_expect_eq(card, game::Card::NONE);
 
 	card = game::Card::Dst200kms;
+	pl.light = false;
+	cr_expect_not(game->useCard(pl, card));
+	cr_expect_eq(pl.distance, 250);
+	cr_expect_neq(card, game::Card::NONE);
+	pl.light = true;
+
+	card = game::Card::HazCarCrash;
+	cr_expect_not(game->useDist(pl, card));
+	cr_expect_eq(pl.distance, 250);
+	cr_expect_neq(card, game::Card::NONE);
+
+	card = game::Card::Dst200kms;
 	cr_expect(game->useCard(pl, card));
 	cr_expect_eq(pl.distance, 450);
 	cr_expect_eq(card, game::Card::NONE);

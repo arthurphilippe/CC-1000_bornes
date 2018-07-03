@@ -95,6 +95,7 @@ bool MilleBornes::useDist(MilleBornes::Player &pl, Card &card)
 			totDist += 200;
 			break;
 		default:
+			totDist = 1001;
 			break;
 		}
 		if (totDist <= 1000) {
