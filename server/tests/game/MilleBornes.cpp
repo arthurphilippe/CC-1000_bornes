@@ -23,7 +23,7 @@ public:
 	void setFd(int fd) { _fd = fd; }
 };
 
-Test(MilleBornes, registration)
+Test(MilleBornes, registration_not_full)
 {
 	io::Selector stor;
 	int filedes[2];
@@ -62,6 +62,46 @@ Test(MilleBornes, registration)
 	cr_assert_eq(game->ready(), true);
 	cr_assert_eq(game->full(), false);
 	close(filedes[1]);
+}
+
+Test(MilleBornes, registration_full)
+{
+	io::Selector stor;
+	int filedes[2];
+
+	if (pipe(filedes) == -1) cr_assert_fail("failed to pipe: errno %d");
+	auto *game = new game::MilleBornes;
+	std::shared_ptr<io::hdl::IMsgProcessor> proc(game);
+	DumbClient clienta(stor, proc, filedes[0]);
+	DumbClient clientb(stor, proc, filedes[0]);
+	DumbClient clientc(stor, proc, filedes[0]);
+	DumbClient clientd(stor, proc, filedes[0]);
+	DumbClient cliente(stor, proc, filedes[0]);
+	DumbClient clientf(stor, proc, filedes[0]);
+	DumbClient clientg(stor, proc, filedes[0]);
+
+	dprintf(filedes[1], "Hi\n");
+	clienta.onRead();
+	dprintf(filedes[1], "Hi\n");
+	clientb.onRead();
+	dprintf(filedes[1], "Hi\n");
+	clientc.onRead();
+	dprintf(filedes[1], "Hi\n");
+	clientd.onRead();
+	dprintf(filedes[1], "Hi\n");
+	cliente.onRead();
+	dprintf(filedes[1], "Hi\n");
+	clientf.onRead();
+	dprintf(filedes[1], "Hi\n");
+	clientg.onRead();
+
+	clienta.onCycle();
+	clientb.onCycle();
+	clientc.onCycle();
+	clientd.onCycle();
+	cliente.onCycle();
+	clientf.onCycle();
+	cr_expect_throw(clientg.onCycle(), std::runtime_error);
 }
 
 Test(MilleBornes, useDist)

@@ -18,30 +18,35 @@ MilleBornes::~MilleBornes() {}
 void MilleBornes::processMsg(io::hdl::Client &handle, const std::string &msg)
 {
 	(void) msg;
-	Player *pl = nullptr;
-	if (_controlAccess(handle, pl)) {
+	try {
+		auto &pl = _controlAccess(handle);
+	} catch (const std::exception &) {
+		throw;
+	} catch (...) {
+		throw std::runtime_error("no room left");
 	}
 }
 
-bool MilleBornes::_controlAccess(
-	io::hdl::Client &handle, MilleBornes::Player *&pl)
+MilleBornes::Player &MilleBornes::_controlAccess(io::hdl::Client &handle)
 {
-	auto ret = false;
-	for (auto &it : _players) {
-		if (it.client.id == handle.id) {
-			ret = true;
-			pl = &it;
-			break;
+	try {
+		auto &pl = this->getPlayer(handle.id);
+		return pl;
+	} catch (...) {
+		if (_players.size() < MAX_PLAYER) {
+			Player tmpPl{{}, handle, 0, Card::NONE, false, false};
+			tmpPl.hand.fill(Card::NONE);
+			_players.push_back(std::move(tmpPl));
 		}
 	}
-	if (!ret && _players.size() < MAX_PLAYER) {
-		Player tmpPl{{}, handle, 0, Card::NONE, false, false};
-		tmpPl.hand.fill(Card::NONE);
-		_players.push_back(std::move(tmpPl));
-		_controlAccess(handle, pl);
-		ret = true;
-	}
-	return (ret);
+	return this->getPlayer(handle.id);
+}
+
+MilleBornes::Player &MilleBornes::getPlayer(unsigned long id)
+{
+	for (auto &pl : _players)
+		if (pl.client.id == id) return (pl);
+	throw 0;
 }
 
 bool MilleBornes::useCard(MilleBornes::Player &pl, Card &card)
@@ -116,7 +121,7 @@ bool MilleBornes::useDefense(MilleBornes::Player &pl, Card &card)
 		pl.hazard = Card::NONE;
 		ret = true;
 	}
-	return (ret);
+	return ret;
 }
 
 bool MilleBornes::useHazard(Player &pl, Card &card, Player &other)
@@ -128,13 +133,6 @@ bool MilleBornes::useHazard(Player &pl, Card &card, Player &other)
 	else
 		other.hazard = card;
 	return ret;
-}
-
-MilleBornes::Player &MilleBornes::_targetPlayer(unsigned long id)
-{
-	for (auto &pl : _players)
-		if (pl.client.id == id) return (pl);
-	throw;
 }
 
 } // namespace game

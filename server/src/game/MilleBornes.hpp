@@ -37,6 +37,7 @@ public:
 	bool ready() const noexcept { return (_players.size() >= 2); }
 	bool full() const noexcept { return (_players.size() >= 6); }
 
+	Player &getPlayer(unsigned long id);
 	bool useCard(Player &pl, Card &card);
 	bool useCard(Player &pl, Card &card, Player &foe);
 	bool useDefense(Player &pl, Card &card);
@@ -44,16 +45,15 @@ public:
 	bool useHazard(Player &pl, Card &card, Player &foe);
 
 private:
-	bool _controlAccess(io::hdl::Client &handle, Player *&pl);
+	Player &_controlAccess(io::hdl::Client &handle);
 
 	Card &_playerSelectCard(Player &pl, Card selection)
 	{
 		for (auto &card : pl.hand) {
 			if (card == selection) return card;
 		}
-		throw;
+		throw 0;
 	}
-	Player &_targetPlayer(unsigned long id);
 
 	Deck _deck;
 	std::list<Player> _players;
