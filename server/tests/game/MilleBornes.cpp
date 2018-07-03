@@ -236,7 +236,7 @@ Test(MilleBornes, useHaz)
 	game::MilleBornes::Player plb{
 		{}, client, 0, game::Card::HazFlatTire, 0, 0, 0, 0, 0, 0};
 
-	auto card = game::Card::HazSpeedLimit;
+	auto card = game::Card::HazCarCrash;
 	cr_expect_not(game->useCard(pla, card));
 	cr_expect_eq(plb.hazard, game::Card::HazFlatTire,
 		"hazard is %d instead of %d", plb.hazard,
@@ -249,18 +249,43 @@ Test(MilleBornes, useHaz)
 		game::Card::HazFlatTire);
 	cr_expect_neq(card, game::Card::NONE);
 
-	plb.hazard = game::Card::NONE;
+	card = game::Card::HazSpeedLimit;
 	cr_expect(game->useCard(pla, card, plb));
-	cr_expect_eq(plb.hazard, game::Card::HazSpeedLimit,
-		"hazard is %d instead of %d", plb.hazard,
-		game::Card::HazSpeedLimit);
+	cr_expect(plb.speedlimited);
 	cr_expect_eq(card, game::Card::NONE);
 
 	card = game::Card::DefRepair;
 	cr_expect_not(game->useCard(pla, card, plb));
-	cr_expect_eq(plb.hazard, game::Card::HazSpeedLimit,
-		"hazard is %d instead of %d", plb.hazard,
-		game::Card::HazSpeedLimit);
+	cr_expect(plb.speedlimited);
+	cr_expect_neq(card, game::Card::NONE);
+
+	card = game::Card::SpeAcePilot;
+	cr_expect(game->useCard(pla, card));
+
+	card = game::Card::HazCarCrash;
+	cr_expect_not(game->useCard(plb, card, pla));
+	cr_expect_neq(card, game::Card::NONE);
+
+	card = game::Card::SpePunctureProof;
+	cr_expect(game->useCard(plb, card));
+
+	card = game::Card::HazFlatTire;
+	cr_expect_not(game->useCard(plb, card, pla));
+	cr_expect_neq(card, game::Card::NONE);
+
+	card = game::Card::HazSpeedLimit;
+	cr_expect(game->useCard(plb, card, pla));
+	cr_expect_eq(card, game::Card::NONE);
+	cr_expect_eq(plb.speedlimited, true);
+
+	card = game::Card::SpePrioritised;
+	cr_expect(game->useCard(pla, card));
+
+	card = game::Card::HazSpeedLimit;
+	cr_expect_not(game->useCard(plb, card, pla));
+	cr_expect_neq(card, game::Card::NONE);
+	card = game::Card::HazRedLight;
+	cr_expect_not(game->useCard(plb, card, pla));
 	cr_expect_neq(card, game::Card::NONE);
 }
 

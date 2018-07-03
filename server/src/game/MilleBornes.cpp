@@ -159,6 +159,9 @@ bool MilleBornes::useDefense(MilleBornes::Player &pl, Card &card)
 	if (pl.hazard != Card::NONE && (cardCode - 5U) == hazard) {
 		pl.hazard = Card::NONE;
 		ret = true;
+	} else if (pl.speedlimited && card == Card::DefEndOfLimit) {
+		pl.speedlimited = false;
+		ret = true;
 	}
 	return ret;
 }
@@ -167,15 +170,17 @@ bool MilleBornes::useHazard(Player &pl, Card &card, Player &other)
 {
 	(void) pl;
 	auto ret(true);
-	if (other.hazard != Card::NONE ||
-		(card == Card::HazCarCrash && pl.acePilot) ||
-		(card == Card::HazGasOutage && pl.tankLorry) ||
-		(card == Card::HazFlatTire && pl.punctureProof) ||
-		((card == Card::HazRedLight || card == Card::HazSpeedLimit) &&
-			pl.pioritised))
+	if ((other.hazard != Card::NONE && card != Card::HazSpeedLimit) ||
+		(card == Card::HazCarCrash && other.acePilot) ||
+		(card == Card::HazGasOutage && other.tankLorry) ||
+		(card == Card::HazFlatTire && other.punctureProof) ||
+		(card == Card::HazRedLight && other.pioritised) ||
+		(card == Card::HazSpeedLimit && other.pioritised))
 		ret = false;
-	else
+	else if (card != Card::HazSpeedLimit)
 		other.hazard = card;
+	else
+		other.speedlimited = true;
 	return ret;
 }
 
@@ -188,12 +193,16 @@ bool MilleBornes::useSpecial(Player &pl, Card &card)
 		break;
 	case Card::SpeTankLorry:
 		pl.tankLorry = true;
+		if (pl.hazard == Card::HazGasOutage) pl.hazard = Card::NONE;
 		break;
 	case Card::SpePunctureProof:
 		pl.punctureProof = true;
+		if (pl.hazard == Card::HazFlatTire) pl.hazard = Card::NONE;
 		break;
 	case Card::SpePrioritised:
 		pl.pioritised = true;
+		if (pl.hazard == Card::HazRedLight) pl.hazard = Card::NONE;
+		if (pl.speedlimited) pl.speedlimited = false;
 		break;
 	default:
 		break;
