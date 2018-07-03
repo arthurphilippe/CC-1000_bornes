@@ -180,3 +180,39 @@ Test(MilleBornes, useDef)
 		"hazard is %d instead of %d", pl.hazard, game::Card::NONE);
 	cr_expect_neq(card, game::Card::NONE);
 }
+
+Test(MilleBornes, useHaz)
+{
+	io::Selector stor;
+	int filedes[2];
+
+	if (pipe(filedes) == -1) cr_assert_fail("failed to pipe: errno %d");
+	auto *game = new game::MilleBornes;
+	std::shared_ptr<io::hdl::IMsgProcessor> proc(game);
+	DumbClient client(stor, proc, filedes[0]);
+
+	game::MilleBornes::Player pla{
+		{}, client, 0, game::Card::HazFlatTire, false, false};
+	game::MilleBornes::Player plb{
+		{}, client, 0, game::Card::HazFlatTire, false, false};
+
+	auto card = game::Card::HazSpeedLimit;
+	cr_expect_not(game->useCard(pla, card));
+	cr_expect_eq(plb.hazard, game::Card::HazFlatTire,
+		"hazard is %d instead of %d", plb.hazard,
+		game::Card::HazFlatTire);
+	cr_expect_neq(card, game::Card::NONE);
+
+	cr_expect_not(game->useCard(pla, card, plb));
+	cr_expect_eq(plb.hazard, game::Card::HazFlatTire,
+		"hazard is %d instead of %d", plb.hazard,
+		game::Card::HazFlatTire);
+	cr_expect_neq(card, game::Card::NONE);
+
+	plb.hazard = game::Card::NONE;
+	cr_expect(game->useCard(pla, card, plb));
+	cr_expect_eq(plb.hazard, game::Card::HazSpeedLimit,
+		"hazard is %d instead of %d", plb.hazard,
+		game::Card::HazSpeedLimit);
+	cr_expect_eq(card, game::Card::NONE);
+}
