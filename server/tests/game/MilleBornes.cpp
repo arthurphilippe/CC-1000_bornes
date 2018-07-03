@@ -95,12 +95,12 @@ Test(MilleBornes, registration_full)
 	dprintf(filedes[1], "Hi\n");
 	clientg.onRead();
 
-	clienta.onCycle();
-	clientb.onCycle();
-	clientc.onCycle();
-	clientd.onCycle();
-	cliente.onCycle();
-	clientf.onCycle();
+	cr_expect_none_throw(clienta.onCycle());
+	cr_expect_none_throw(clientb.onCycle());
+	cr_expect_none_throw(clientc.onCycle());
+	cr_expect_none_throw(clientd.onCycle());
+	cr_expect_none_throw(cliente.onCycle());
+	cr_expect_none_throw(clientf.onCycle());
 	cr_expect_throw(clientg.onCycle(), std::runtime_error);
 }
 
