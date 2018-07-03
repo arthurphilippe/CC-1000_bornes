@@ -8,22 +8,57 @@
 #include "MilleBornes.hpp"
 #include <iostream>
 #include "io/hdl/Client.hpp"
+#include "tools/Parsing.hpp"
 
 namespace game {
 
-MilleBornes::MilleBornes() : _deck(), _players(), _live(true) {}
+MilleBornes::MilleBornes()
+	: _deck(), _players(), _live(true), _currentPlayer(_players.begin())
+{}
 
 MilleBornes::~MilleBornes() {}
 
 void MilleBornes::processMsg(io::hdl::Client &handle, const std::string &msg)
 {
-	(void) msg;
 	try {
 		auto &pl = _controlAccess(handle);
+		if (!msg.empty() && _currentPlayer->client.id == handle.id) {
+			// TODO msg not your turn
+		} else if (!msg.empty()) {
+			auto splitMsg =
+				tools::Parsing::createVectorString(msg, ' ');
+			this->runCmd(pl, splitMsg);
+		}
 	} catch (const std::exception &) {
 		throw;
 	} catch (...) {
 		throw std::runtime_error("no room left");
+	}
+}
+
+void MilleBornes::runCmd(Player &pl, std::vector<std::string> &splitCmd)
+{
+	if (splitCmd.size() <= 1) return;
+
+	unsigned int nb;
+	try {
+		nb = std::stoi(splitCmd[1]);
+	} catch (...) {
+		return;
+	}
+
+	if (splitCmd.front() == "use" && splitCmd.size() == 2) {
+		useCard(pl, pl.hand[nb]);
+	} else if (splitCmd.front() == "use" && splitCmd.size() == 3) {
+		try {
+			auto id(std::stoul(splitCmd[2]));
+			useCard(pl, pl.hand[nb], _getPlayer(id));
+		} catch (...) {
+			return;
+		}
+	} else if (splitCmd.front() == "discard") {
+		_deck.throwAway(pl.hand[nb]);
+		pl.hand[nb] = Card::NONE;
 	}
 }
 
@@ -38,6 +73,7 @@ MilleBornes::Player &MilleBornes::_controlAccess(io::hdl::Client &handle)
 				{}, handle, 0, Card::NONE, 0, 0, 0, 0, 0, 0};
 			tmpPl.hand.fill(Card::NONE);
 			_players.push_back(std::move(tmpPl));
+			_currentPlayer = _players.begin();
 		}
 	}
 	return this->_getPlayer(handle.id);

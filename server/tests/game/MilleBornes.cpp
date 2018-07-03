@@ -263,3 +263,46 @@ Test(MilleBornes, useHaz)
 		game::Card::HazSpeedLimit);
 	cr_expect_neq(card, game::Card::NONE);
 }
+
+Test(MilleBornes, runCmd)
+{
+	io::Selector stor;
+	int filedes[2];
+
+	if (pipe(filedes) == -1) cr_assert_fail("failed to pipe: errno %d");
+	auto *game = new game::MilleBornes;
+	std::shared_ptr<io::hdl::IMsgProcessor> proc(game);
+	DumbClient client(stor, proc, filedes[0]);
+	DumbClient clienta(stor, proc, filedes[0]);
+	DumbClient clientb(stor, proc, filedes[0]);
+
+	dprintf(filedes[1], "Hi\n");
+	clienta.onRead();
+	dprintf(filedes[1], "Hi\n");
+	clientb.onRead();
+	clienta.onCycle();
+	clientb.onCycle();
+
+	game::MilleBornes::Player pl{
+		{}, client, 0, game::Card::NONE, 0, 1, 0, 0, 0, 0};
+	pl.hand[4] = game::Card::Dst75kms;
+	std::vector<std::string> splitmsg{
+		std::string{"use"}, std::string{"4"}};
+	game->runCmd(pl, splitmsg);
+	cr_expect_eq(pl.hand[4], game::Card::NONE);
+	cr_expect_eq(pl.distance, 75);
+
+	pl.hand[2] = game::Card::HazFlatTire;
+	splitmsg[1] = "2";
+	splitmsg.push_back("2");
+	game->runCmd(pl, splitmsg);
+	cr_expect_eq(pl.hand[2], game::Card::NONE);
+
+	pl.hand[3] = game::Card::SpeAcePilot;
+	splitmsg[1] = "3";
+	splitmsg.pop_back();
+	splitmsg[0] = "discard";
+	game->runCmd(pl, splitmsg);
+	cr_expect_eq(pl.hand[3], game::Card::NONE);
+	cr_expect_eq(pl.hand[2], game::Card::NONE);
+}

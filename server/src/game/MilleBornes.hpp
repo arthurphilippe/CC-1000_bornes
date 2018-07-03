@@ -48,11 +48,19 @@ public:
 	bool useHazard(Player &pl, Card &card, Player &foe);
 	bool useSpecial(Player &pl, Card &card);
 
+	void runCmd(Player &pl, std::vector<std::string> &splitCmd);
+
 private:
 	Player &_getPlayer(unsigned long id);
 	Player &_controlAccess(io::hdl::Client &handle);
 
 	void _onVictory();
+	void _nextPlayer()
+	{
+		_currentPlayer++;
+		if (_currentPlayer == _players.end())
+			_currentPlayer = _players.begin();
+	}
 
 	Card &_playerSelectCard(Player &pl, Card selection)
 	{
@@ -65,6 +73,7 @@ private:
 	Deck _deck;
 	std::list<Player> _players;
 	bool _live;
+	std::list<Player>::iterator _currentPlayer;
 };
 
 } // namespace game
