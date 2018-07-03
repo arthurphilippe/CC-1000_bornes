@@ -33,10 +33,8 @@ public:
 	virtual void onCycle() = 0;
 	virtual void onRead() = 0;
 	virtual bool live() const noexcept = 0;
+	virtual void setLive(bool live) noexcept = 0;
 };
-
-// using MsgProcessor =
-// 	std::function<void(IHandle &hdl, const std::string &msg)>;
 
 } // namespace io::hdl
 

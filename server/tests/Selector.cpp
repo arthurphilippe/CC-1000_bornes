@@ -39,6 +39,7 @@ public:
 		if (str == "quit\n") _stor.setLive(false);
 	}
 	bool live() const noexcept override { return _live; }
+	void setLive(bool live) noexcept { _live = live; }
 
 	io::Selector &_stor;
 	bool _live;

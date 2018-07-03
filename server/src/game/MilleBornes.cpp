@@ -30,19 +30,20 @@ void MilleBornes::processMsg(io::hdl::Client &handle, const std::string &msg)
 MilleBornes::Player &MilleBornes::_controlAccess(io::hdl::Client &handle)
 {
 	try {
-		auto &pl = this->getPlayer(handle.id);
+		auto &pl = this->_getPlayer(handle.id);
 		return pl;
 	} catch (...) {
 		if (_players.size() < MAX_PLAYER) {
-			Player tmpPl{{}, handle, 0, Card::NONE, false, false};
+			Player tmpPl{
+				{}, handle, 0, Card::NONE, 0, 0, 0, 0, 0, 0};
 			tmpPl.hand.fill(Card::NONE);
 			_players.push_back(std::move(tmpPl));
 		}
 	}
-	return this->getPlayer(handle.id);
+	return this->_getPlayer(handle.id);
 }
 
-MilleBornes::Player &MilleBornes::getPlayer(unsigned long id)
+MilleBornes::Player &MilleBornes::_getPlayer(unsigned long id)
 {
 	for (auto &pl : _players)
 		if (pl.client.id == id) return (pl);
@@ -57,6 +58,7 @@ bool MilleBornes::useCard(MilleBornes::Player &pl, Card &card)
 		ret = useDefense(pl, card);
 		break;
 	case Card::SpeAcePilot... Card::SpePrioritised:
+		ret = useSpecial(pl, card);
 		break;
 	case Card::Dst25kms... Card::Dst200kms:
 		ret = useDist(pl, card);
@@ -107,6 +109,7 @@ bool MilleBornes::useDist(MilleBornes::Player &pl, Card &card)
 		if (totDist <= 1000) {
 			pl.distance = totDist;
 			ret = true;
+			if (pl.distance == 1000) this->_onVictory();
 		}
 	}
 	return ret;
@@ -128,11 +131,48 @@ bool MilleBornes::useHazard(Player &pl, Card &card, Player &other)
 {
 	(void) pl;
 	auto ret(true);
-	if (other.hazard != Card::NONE)
+	if (other.hazard != Card::NONE ||
+		(card == Card::HazCarCrash && pl.acePilot) ||
+		(card == Card::HazGasOutage && pl.tankLorry) ||
+		(card == Card::HazFlatTire && pl.punctureProof) ||
+		((card == Card::HazRedLight || card == Card::HazSpeedLimit) &&
+			pl.pioritised))
 		ret = false;
 	else
 		other.hazard = card;
 	return ret;
+}
+
+bool MilleBornes::useSpecial(Player &pl, Card &card)
+{
+	auto ret(true);
+	switch (card) {
+	case Card::SpeAcePilot:
+		pl.acePilot = true;
+		break;
+	case Card::SpeTankLorry:
+		pl.tankLorry = true;
+		break;
+	case Card::SpePunctureProof:
+		pl.punctureProof = true;
+		break;
+	case Card::SpePrioritised:
+		pl.pioritised = true;
+		break;
+	default:
+		break;
+		ret = false;
+	}
+	return ret;
+}
+
+// TODO: Send msg to everyone
+void MilleBornes::_onVictory()
+{
+	for (auto &it : _players) {
+		it.client.setLive(false);
+	}
+	_live = false;
 }
 
 } // namespace game

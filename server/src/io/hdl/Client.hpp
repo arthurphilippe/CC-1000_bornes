@@ -43,6 +43,7 @@ public:
 	virtual void onCycle() override;
 	virtual void onRead() override;
 	virtual bool live() const noexcept override { return _live; }
+	virtual void setLive(bool live) noexcept override { _live = live; }
 	void setMsgProcessor(std::shared_ptr<IMsgProcessor> &proc)
 	{
 		_msgProcessor = proc;

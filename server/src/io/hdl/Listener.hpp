@@ -22,6 +22,7 @@ public:
 	void onCycle() override {}
 	void onRead() override;
 	bool live() const noexcept override { return _live; }
+	void setLive(bool live) noexcept override { _live = live; }
 
 	static int portBind(int sock, int port);
 

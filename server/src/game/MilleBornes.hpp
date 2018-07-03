@@ -28,6 +28,10 @@ public:
 		Card hazard;
 		bool speedlimited;
 		bool light;
+		bool acePilot;
+		bool tankLorry;
+		bool punctureProof;
+		bool pioritised;
 	};
 	MilleBornes();
 	~MilleBornes();
@@ -37,15 +41,18 @@ public:
 	bool ready() const noexcept { return (_players.size() >= 2); }
 	bool full() const noexcept { return (_players.size() >= 6); }
 
-	Player &getPlayer(unsigned long id);
 	bool useCard(Player &pl, Card &card);
 	bool useCard(Player &pl, Card &card, Player &foe);
 	bool useDefense(Player &pl, Card &card);
 	bool useDist(Player &pl, Card &card);
 	bool useHazard(Player &pl, Card &card, Player &foe);
+	bool useSpecial(Player &pl, Card &card);
 
 private:
+	Player &_getPlayer(unsigned long id);
 	Player &_controlAccess(io::hdl::Client &handle);
+
+	void _onVictory();
 
 	Card &_playerSelectCard(Player &pl, Card selection)
 	{

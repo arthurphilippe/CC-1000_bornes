@@ -115,7 +115,7 @@ Test(MilleBornes, useDist)
 	DumbClient client(stor, proc, filedes[0]);
 
 	game::MilleBornes::Player pl{
-		{}, client, 0, game::Card::NONE, false, false};
+		{}, client, 0, game::Card::NONE, 0, 0, 0, 0, 0, 0};
 	game::Card card = game::Card::Dst75kms;
 	cr_expect_not(game->useCard(pl, card));
 	cr_expect_eq(pl.distance, 0);
@@ -199,7 +199,7 @@ Test(MilleBornes, useDef)
 	DumbClient client(stor, proc, filedes[0]);
 
 	game::MilleBornes::Player pl{
-		{}, client, 0, game::Card::HazFlatTire, false, false};
+		{}, client, 0, game::Card::HazFlatTire, 0, 0, 0, 0, 0, 0};
 
 	auto card = game::Card::DefGas;
 	cr_expect_not(game->useCard(pl, card));
@@ -232,9 +232,9 @@ Test(MilleBornes, useHaz)
 	DumbClient client(stor, proc, filedes[0]);
 
 	game::MilleBornes::Player pla{
-		{}, client, 0, game::Card::HazFlatTire, false, false};
+		{}, client, 0, game::Card::HazFlatTire, 0, 0, 0, 0, 0, 0};
 	game::MilleBornes::Player plb{
-		{}, client, 0, game::Card::HazFlatTire, false, false};
+		{}, client, 0, game::Card::HazFlatTire, 0, 0, 0, 0, 0, 0};
 
 	auto card = game::Card::HazSpeedLimit;
 	cr_expect_not(game->useCard(pla, card));
