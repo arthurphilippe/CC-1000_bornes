@@ -310,6 +310,7 @@ Test(MilleBornes, runCmd)
 	cr_expect_eq(pl.hand[2], game::Card::NONE);
 
 	pl.hand[3] = game::Card::SpeAcePilot;
+	splitmsg[0] = "discard";
 	splitmsg[1] = "3";
 	splitmsg.pop_back();
 	game->runCmd(pl, splitmsg);
