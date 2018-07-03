@@ -94,9 +94,16 @@ Test(MilleBornes, useDist)
 	cr_expect_eq(card, game::Card::NONE);
 
 	card = game::Card::Dst50kms;
+	pl.speedlimited = true;
 	cr_expect(game->useCard(pl, card));
 	cr_expect_eq(pl.distance, 150);
 	cr_expect_eq(card, game::Card::NONE);
+
+	card = game::Card::Dst100kms;
+	cr_expect_not(game->useCard(pl, card));
+	cr_expect_eq(pl.distance, 150);
+	cr_expect_neq(card, game::Card::NONE);
+	pl.speedlimited = false;
 
 	card = game::Card::Dst100kms;
 	cr_expect(game->useCard(pl, card));

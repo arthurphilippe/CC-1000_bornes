@@ -111,10 +111,7 @@ bool MilleBornes::useDefense(MilleBornes::Player &pl, Card &card)
 	auto cardCode(static_cast<unsigned int>(card));
 	auto hazard(static_cast<unsigned int>(pl.hazard));
 	auto ret(false);
-	std::cout << "card code: " << cardCode << " | hazard: " << hazard
-		  << std::endl;
 	if (pl.hazard != Card::NONE && (cardCode - 5U) == hazard) {
-		std::cout << "reset\n";
 		pl.hazard = Card::NONE;
 		ret = true;
 	}
