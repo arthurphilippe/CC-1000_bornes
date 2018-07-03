@@ -215,4 +215,11 @@ Test(MilleBornes, useHaz)
 		"hazard is %d instead of %d", plb.hazard,
 		game::Card::HazSpeedLimit);
 	cr_expect_eq(card, game::Card::NONE);
+
+	card = game::Card::DefRepair;
+	cr_expect_not(game->useCard(pla, card, plb));
+	cr_expect_eq(plb.hazard, game::Card::HazSpeedLimit,
+		"hazard is %d instead of %d", plb.hazard,
+		game::Card::HazSpeedLimit);
+	cr_expect_neq(card, game::Card::NONE);
 }

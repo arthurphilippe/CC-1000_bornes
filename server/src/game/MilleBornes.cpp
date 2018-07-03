@@ -66,7 +66,7 @@ bool MilleBornes::useCard(MilleBornes::Player &pl, Card &card)
 bool MilleBornes::useCard(Player &pl, Card &card, Player &foe)
 {
 	auto ret(false);
-	if (card >= Card::HazCarCrash && card <= Card::HazRedLight) {
+	if (card <= Card::HazRedLight) {
 		ret = useHazard(pl, card, foe);
 	}
 	if (ret) card = Card::NONE;
