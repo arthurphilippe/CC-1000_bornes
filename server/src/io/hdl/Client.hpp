@@ -10,6 +10,7 @@
 
 #include <list>
 #include <memory>
+#include <sstream>
 #include <string>
 #include "io/hdl/IHandle.hpp"
 #include "io/hdl/IMsgProcessor.hpp"
@@ -48,6 +49,15 @@ public:
 	{
 		_msgProcessor = proc;
 	}
+	virtual std::ostream &stream() noexcept { return _oss; }
+	virtual void dumpStream()
+	{
+		if (!_oss.str().empty()) {
+			dprintf(_fd, "%s", _oss.str().c_str());
+			_oss.str() = "";
+		}
+	}
+
 	const unsigned long id;
 
 protected:
@@ -56,6 +66,8 @@ protected:
 	int _fd;
 	bool _live;
 	std::list<std::string> _receivedMsgs;
+
+	std::ostringstream _oss;
 
 	static unsigned long __id;
 };

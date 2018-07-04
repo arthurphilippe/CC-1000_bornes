@@ -21,6 +21,7 @@ public:
 	{}
 	std::list<std::string> &getMsgs() { return _receivedMsgs; }
 	void setFd(int fd) { _fd = fd; }
+	virtual void dumpStream() override {}
 };
 
 Test(MilleBornes, registration_not_full)
@@ -33,29 +34,33 @@ Test(MilleBornes, registration_not_full)
 	std::shared_ptr<io::hdl::IMsgProcessor> proc(game);
 	DumbClient clienta(stor, proc, filedes[0]);
 	DumbClient clientb(stor, proc, filedes[0]);
+	auto &ossa = static_cast<std::stringstream &>(clienta.stream());
+	auto &ossb = static_cast<std::stringstream &>(clientb.stream());
 
-	dprintf(filedes[1], "Hi\n");
+	dprintf(filedes[1], "hi\n");
 	clienta.onRead();
-	dprintf(filedes[1], "Hi\n");
+	dprintf(filedes[1], "hi\n");
 	clientb.onRead();
 	clienta.onCycle();
 	clientb.onCycle();
-	dprintf(filedes[1], "Hi\n");
+	cr_expect_eq(ossa.str(), "id 1\n");
+	cr_expect_eq(ossb.str(), "id 2\n");
+	dprintf(filedes[1], "hi\n");
 	clientb.onRead();
 	clientb.onCycle();
-	dprintf(filedes[1], "Hi\n");
+	dprintf(filedes[1], "hi\n");
 	clientb.onRead();
 	clientb.onCycle();
-	dprintf(filedes[1], "Hi\n");
+	dprintf(filedes[1], "hi\n");
 	clientb.onRead();
 	clientb.onCycle();
-	dprintf(filedes[1], "Hi\n");
+	dprintf(filedes[1], "hi\n");
 	clientb.onRead();
 	clientb.onCycle();
-	dprintf(filedes[1], "Hi\n");
+	dprintf(filedes[1], "hi\n");
 	clientb.onRead();
 	clientb.onCycle();
-	dprintf(filedes[1], "Hi\n");
+	dprintf(filedes[1], "hi\n");
 	clientb.onRead();
 	clientb.onCycle();
 
@@ -80,19 +85,19 @@ Test(MilleBornes, registration_full)
 	DumbClient clientf(stor, proc, filedes[0]);
 	DumbClient clientg(stor, proc, filedes[0]);
 
-	dprintf(filedes[1], "Hi\n");
+	dprintf(filedes[1], "hi\n");
 	clienta.onRead();
-	dprintf(filedes[1], "Hi\n");
+	dprintf(filedes[1], "hi\n");
 	clientb.onRead();
-	dprintf(filedes[1], "Hi\n");
+	dprintf(filedes[1], "hi\n");
 	clientc.onRead();
-	dprintf(filedes[1], "Hi\n");
+	dprintf(filedes[1], "hi\n");
 	clientd.onRead();
-	dprintf(filedes[1], "Hi\n");
+	dprintf(filedes[1], "hi\n");
 	cliente.onRead();
-	dprintf(filedes[1], "Hi\n");
+	dprintf(filedes[1], "hi\n");
 	clientf.onRead();
-	dprintf(filedes[1], "Hi\n");
+	dprintf(filedes[1], "hi\n");
 	clientg.onRead();
 
 	cr_expect_none_throw(clienta.onCycle());
@@ -301,9 +306,9 @@ Test(MilleBornes, runCmd)
 	DumbClient clienta(stor, proc, filedes[0]);
 	DumbClient clientb(stor, proc, filedes[0]);
 
-	dprintf(filedes[1], "Hi\n");
+	dprintf(filedes[1], "hi\n");
 	clienta.onRead();
-	dprintf(filedes[1], "Hi\n");
+	dprintf(filedes[1], "hi\n");
 	clientb.onRead();
 	clienta.onCycle();
 	clientb.onCycle();
@@ -344,4 +349,44 @@ Test(MilleBornes, runCmd)
 	splitmsg[1] = "qsjdfhnlsjrhgs";
 	splitmsg[0] = "5644sqdf";
 	cr_expect_none_throw(game->runCmd(pl, splitmsg));
+}
+
+Test(MilleBornes, start)
+{
+	io::Selector stor;
+	int filedes[2];
+
+	if (pipe(filedes) == -1) cr_assert_fail("failed to pipe: errno %d");
+	auto *game = new game::MilleBornes;
+	std::shared_ptr<io::hdl::IMsgProcessor> proc(game);
+	DumbClient clienta(stor, proc, filedes[0]);
+	DumbClient clientb(stor, proc, filedes[0]);
+	auto &ossa = static_cast<std::stringstream &>(clienta.stream());
+	auto &ossb = static_cast<std::stringstream &>(clientb.stream());
+
+	dprintf(filedes[1], "hi\n");
+	clienta.onRead();
+	dprintf(filedes[1], "hi\n");
+	clientb.onRead();
+	clienta.onCycle();
+	clientb.onCycle();
+	cr_expect_eq(ossa.str(), "id 1\n");
+	cr_expect_eq(ossb.str(), "id 2\n");
+	ossa.str("");
+	ossb.str("");
+
+	cr_expect(game->ready());
+	game->start();
+	cr_expect_eq(ossa.str(), "lsplayers 1 2\n");
+	cr_expect_eq(ossb.str(), "lsplayers 1 2\n");
+	ossa.str("");
+	ossb.str("");
+
+	dprintf(filedes[1], "discard 3\n");
+	clientb.onRead();
+	clientb.onCycle();
+
+	// cr_log_warn(ossb.str());
+	cr_expect_eq(ossb.str(), "not_your_turn\n");
+	ossb.str("");
 }

@@ -8,10 +8,12 @@
 #ifndef MILLEBORNES_HPP_
 #define MILLEBORNES_HPP_
 
+#include <iostream>
 #include <list>
 #include <vector>
 #include "Card.hpp"
 #include "Deck.hpp"
+#include "io/hdl/Client.hpp"
 #include "io/hdl/IMsgProcessor.hpp"
 
 namespace game {
@@ -37,6 +39,8 @@ public:
 	~MilleBornes();
 	void processMsg(
 		io::hdl::Client &handle, const std::string &msg) override;
+	void onCycle();
+	void start();
 	bool live() const noexcept override { return _live; }
 	bool ready() const noexcept { return (_players.size() >= 2); }
 	bool full() const noexcept { return (_players.size() >= 6); }
@@ -60,6 +64,7 @@ private:
 		_currentPlayer++;
 		if (_currentPlayer == _players.end())
 			_currentPlayer = _players.begin();
+		_currentPlayer->client.stream() << "your_turn" << std::endl;
 	}
 
 	Card &_playerSelectCard(Player &pl, Card selection)
@@ -70,9 +75,24 @@ private:
 		throw 0;
 	}
 
+	void dump(std::ostream &os, const Player &pl)
+	{
+		os << "playerstate " << pl.distance << " " << pl.hazard << " "
+		   << pl.speedlimited << " " << pl.acePilot << " "
+		   << pl.tankLorry << " " << pl.punctureProof << " "
+		   << pl.pioritised << std::endl;
+	}
+	void dump(std::ostream &os, const std::list<Player> &players)
+	{
+		os << "lsplayers";
+		for (const auto &pl : players) os << " " << pl.client.id;
+		os << std::endl;
+	}
+
 	Deck _deck;
 	std::list<Player> _players;
 	bool _live;
+	bool _started;
 	std::list<Player>::iterator _currentPlayer;
 };
 

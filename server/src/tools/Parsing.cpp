@@ -37,7 +37,7 @@ std::string Parsing::getStringFromArgNb(std::string string, int nb)
 std::vector<std::string> Parsing::createVectorString(
 	std::string string, char delim)
 {
-	int total = std::count(string.begin(), string.end(), delim);
+	int total = std::count(string.begin(), string.end(), delim) + 1;
 	std::vector<std::string> vec(total);
 	std::size_t idx(0);
 
@@ -55,6 +55,7 @@ std::vector<std::string> Parsing::createVectorString(
 	if (string.length() > 0) {
 		vec[idx++] = string;
 	}
+	while (vec.back().empty()) vec.pop_back();
 	return vec;
 }
 

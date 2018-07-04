@@ -12,7 +12,7 @@
 
 namespace io::hdl {
 
-unsigned long Client::__id(0);
+unsigned long Client::__id(1);
 
 Client::~Client() { close(_fd); }
 

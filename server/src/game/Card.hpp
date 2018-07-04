@@ -8,6 +8,8 @@
 #ifndef CARD_HPP_
 #define CARD_HPP_
 
+#include <iostream>
+
 namespace game {
 
 enum class Card : unsigned int {
@@ -38,4 +40,12 @@ enum class Card : unsigned int {
 	NONE,
 };
 }
+
+static inline std::ostream &operator<<(
+	std::ostream &os, const game::Card &card)
+{
+	os << static_cast<unsigned int>(card);
+	return os;
+}
+
 #endif /* !CARD_HPP_ */

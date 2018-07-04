@@ -7,13 +7,16 @@
 
 #include "MilleBornes.hpp"
 #include <iostream>
-#include "io/hdl/Client.hpp"
 #include "tools/Parsing.hpp"
 
 namespace game {
 
 MilleBornes::MilleBornes()
-	: _deck(), _players(), _live(true), _currentPlayer(_players.begin())
+	: _deck(),
+	  _players(),
+	  _live(true),
+	  _started(false),
+	  _currentPlayer(_players.begin())
 {}
 
 MilleBornes::~MilleBornes() {}
@@ -22,18 +25,34 @@ void MilleBornes::processMsg(io::hdl::Client &handle, const std::string &msg)
 {
 	try {
 		auto &pl = _controlAccess(handle);
-		if (!msg.empty() && _currentPlayer->client.id == handle.id) {
-			// TODO msg not your turn
-		} else if (!msg.empty()) {
+		if (!msg.empty() && _started &&
+			_currentPlayer->client.id != handle.id) {
+			pl.client.stream() << "not_your_turn" << std::endl;
+		} else if (!msg.empty() && _started) {
 			auto splitMsg =
 				tools::Parsing::createVectorString(msg, ' ');
-			this->runCmd(pl, splitMsg);
 		}
+		handle.dumpStream();
 	} catch (const std::exception &) {
 		throw;
 	} catch (...) {
 		throw std::runtime_error("no room left");
 	}
+}
+
+void MilleBornes::onCycle() {}
+
+void MilleBornes::start()
+{
+	_currentPlayer = _players.begin();
+	for (auto &pl : _players) {
+		dump(pl.client.stream(), _players);
+		pl.client.dumpStream();
+		for (auto &card : pl.hand) {
+			card = _deck.drawCard();
+		}
+	}
+	_started = true;
 }
 
 void MilleBornes::runCmd(Player &pl, std::vector<std::string> &splitCmd)
@@ -47,18 +66,24 @@ void MilleBornes::runCmd(Player &pl, std::vector<std::string> &splitCmd)
 		return;
 	}
 
+	auto ret(false);
 	if (splitCmd.front() == "use" && splitCmd.size() == 2) {
-		useCard(pl, pl.hand[nb]);
+		ret = useCard(pl, pl.hand[nb]);
 	} else if (splitCmd.front() == "use" && splitCmd.size() == 3) {
 		try {
 			auto id(std::stoul(splitCmd[2]));
-			useCard(pl, pl.hand[nb], _getPlayer(id));
+			ret = useCard(pl, pl.hand[nb], _getPlayer(id));
 		} catch (...) {
 			return;
 		}
 	} else if (splitCmd.front() == "discard") {
 		_deck.throwAway(pl.hand[nb]);
 		pl.hand[nb] = Card::NONE;
+		ret = true;
+	}
+	if (ret) {
+		pl.client.stream() << "ok" << std::endl;
+		_nextPlayer();
 	}
 }
 
@@ -74,6 +99,8 @@ MilleBornes::Player &MilleBornes::_controlAccess(io::hdl::Client &handle)
 			tmpPl.hand.fill(Card::NONE);
 			_players.push_back(std::move(tmpPl));
 			_currentPlayer = _players.begin();
+			handle.stream() << "id " << handle.id << std::endl;
+			handle.dumpStream();
 		}
 	}
 	return this->_getPlayer(handle.id);
@@ -215,6 +242,8 @@ bool MilleBornes::useSpecial(Player &pl, Card &card)
 void MilleBornes::_onVictory()
 {
 	for (auto &it : _players) {
+		it.client.stream() << "winner " << _currentPlayer->client.id
+				   << std::endl;
 		it.client.setLive(false);
 	}
 	_live = false;
