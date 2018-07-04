@@ -31,6 +31,7 @@ void MilleBornes::processMsg(io::hdl::Client &handle, const std::string &msg)
 		} else if (!msg.empty() && _started) {
 			auto splitMsg =
 				tools::Parsing::createVectorString(msg, ' ');
+			runCmd(pl, splitMsg);
 		}
 		handle.dumpStream();
 	} catch (const std::exception &) {

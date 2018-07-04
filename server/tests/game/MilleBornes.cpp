@@ -21,7 +21,7 @@ public:
 	{}
 	std::list<std::string> &getMsgs() { return _receivedMsgs; }
 	void setFd(int fd) { _fd = fd; }
-	virtual void dumpStream() override {}
+	void dumpStream() override { std::cout << "poperoverride\n"; }
 };
 
 Test(MilleBornes, registration_not_full)
@@ -34,6 +34,8 @@ Test(MilleBornes, registration_not_full)
 	std::shared_ptr<io::hdl::IMsgProcessor> proc(game);
 	DumbClient clienta(stor, proc, filedes[0]);
 	DumbClient clientb(stor, proc, filedes[0]);
+	clienta.setLive(false);
+	clientb.setLive(false);
 	auto &ossa = static_cast<std::stringstream &>(clienta.stream());
 	auto &ossb = static_cast<std::stringstream &>(clientb.stream());
 
@@ -361,6 +363,8 @@ Test(MilleBornes, start)
 	std::shared_ptr<io::hdl::IMsgProcessor> proc(game);
 	DumbClient clienta(stor, proc, filedes[0]);
 	DumbClient clientb(stor, proc, filedes[0]);
+	clienta.setLive(false);
+	clientb.setLive(false);
 	auto &ossa = static_cast<std::stringstream &>(clienta.stream());
 	auto &ossb = static_cast<std::stringstream &>(clientb.stream());
 
@@ -386,7 +390,19 @@ Test(MilleBornes, start)
 	clientb.onRead();
 	clientb.onCycle();
 
-	// cr_log_warn(ossb.str());
 	cr_expect_eq(ossb.str(), "not_your_turn\n");
+	ossb.str("");
+
+	dprintf(filedes[1], "discard 3\n");
+	clienta.onRead();
+	clienta.onCycle();
+	cr_expect_eq(ossa.str(), "ok\n");
+	ossa.str("");
+
+	dprintf(filedes[1], "discard 3\n");
+	clientb.onRead();
+	clientb.onCycle();
+	cr_expect_neq(ossb.str(), "not_your_turn\n");
+	cr_expect_eq(ossb.str(), "your_turn\nok\n");
 	ossb.str("");
 }

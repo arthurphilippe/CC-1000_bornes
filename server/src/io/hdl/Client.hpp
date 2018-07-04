@@ -52,7 +52,7 @@ public:
 	virtual std::ostream &stream() noexcept { return _oss; }
 	virtual void dumpStream()
 	{
-		if (!_oss.str().empty()) {
+		if (!_oss.str().empty() && _live) {
 			dprintf(_fd, "%s", _oss.str().c_str());
 			_oss.str() = "";
 		}
