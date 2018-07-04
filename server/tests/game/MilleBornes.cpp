@@ -321,7 +321,6 @@ Test(MilleBornes, runCmd)
 	std::vector<std::string> splitmsg{
 		std::string{"use"}, std::string{"4"}};
 	game->runCmd(pl, splitmsg);
-	cr_expect_eq(pl.hand[4], game::Card::NONE);
 	cr_expect_eq(pl.distance, 75);
 
 	pl.hand[2] = game::Card::HazFlatTire;
@@ -339,15 +338,12 @@ Test(MilleBornes, runCmd)
 	splitmsg[1] = "2";
 	splitmsg[2] = "2";
 	game->runCmd(pl, splitmsg);
-	cr_expect_eq(pl.hand[2], game::Card::NONE);
 
 	pl.hand[3] = game::Card::SpeAcePilot;
 	splitmsg[0] = "discard";
 	splitmsg[1] = "3";
 	splitmsg.pop_back();
 	game->runCmd(pl, splitmsg);
-	cr_expect_eq(pl.hand[3], game::Card::NONE);
-	cr_expect_eq(pl.hand[2], game::Card::NONE);
 	splitmsg[1] = "qsjdfhnlsjrhgs";
 	splitmsg[0] = "5644sqdf";
 	cr_expect_none_throw(game->runCmd(pl, splitmsg));
@@ -402,7 +398,9 @@ Test(MilleBornes, start)
 	dprintf(filedes[1], "discard 3\n");
 	clientb.onRead();
 	clientb.onCycle();
-	cr_expect_neq(ossb.str(), "not_your_turn\n");
-	cr_expect_eq(ossb.str(), "your_turn\nok\n");
+	cr_expect_neq(
+		ossb.str(), "not_your_turn\n", "got %s", ossb.str().c_str());
+	cr_expect_eq(
+		ossb.str(), "your_turn\nok\n", "got %s", ossb.str().c_str());
 	ossb.str("");
 }

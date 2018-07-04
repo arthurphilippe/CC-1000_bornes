@@ -79,11 +79,11 @@ void MilleBornes::runCmd(Player &pl, std::vector<std::string> &splitCmd)
 		}
 	} else if (splitCmd.front() == "discard") {
 		_deck.throwAway(pl.hand[nb]);
-		pl.hand[nb] = Card::NONE;
 		ret = true;
 	}
 	if (ret) {
 		pl.client.stream() << "ok" << std::endl;
+		pl.hand[nb] = _deck.drawCard();
 		_nextPlayer();
 	}
 }
