@@ -45,7 +45,8 @@ void MilleBornes::onCycle() {}
 
 void MilleBornes::start()
 {
-	_currentPlayer = _players.begin();
+	_currentPlayer = _players.end();
+	_nextPlayer();
 	for (auto &pl : _players) {
 		dump(pl.client.stream(), _players);
 		pl.client.dumpStream();

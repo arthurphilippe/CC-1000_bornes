@@ -29,6 +29,7 @@ void Selector::_select()
 void Selector::_setFileDescriptors() noexcept
 {
 	_highestSetFd = 0;
+	FD_ZERO(&_fdSet);
 	for (auto &it : _handles) {
 		auto fd = it->getFd();
 		FD_SET(fd, &_fdSet);

@@ -54,7 +54,7 @@ public:
 	{
 		if (!_oss.str().empty() && _live) {
 			dprintf(_fd, "%s", _oss.str().c_str());
-			_oss.str() = "";
+			_oss.str("");
 		}
 	}
 
