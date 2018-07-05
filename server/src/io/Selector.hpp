@@ -23,7 +23,7 @@ public:
 	Selector(const Selector &) = delete;
 	~Selector();
 
-	void registerHandle(std::unique_ptr<hdl::IHandle> &hdl)
+	virtual void registerHandle(std::unique_ptr<hdl::IHandle> &hdl)
 	{
 		_handles.push_back(std::move(hdl));
 	}
@@ -43,7 +43,7 @@ public:
 	}
 	virtual void setLive(bool status) noexcept { _live = status; }
 
-private:
+protected:
 	void _select();
 	void _setFileDescriptors() noexcept;
 	void _readOnActiveHandles();

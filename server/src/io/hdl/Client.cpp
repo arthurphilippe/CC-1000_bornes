@@ -19,13 +19,14 @@ Client::~Client() { close(_fd); }
 void Client::onCycle()
 {
 	while (!_receivedMsgs.empty()) {
-		if (_receivedMsgs.front() == "quit") _stor.setLive(false);
+		// if (_receivedMsgs.front() == "quit") _stor.setLive(false);
 		if (_msgProcessor && !_msgProcessor->live())
 			_msgProcessor.reset();
-		dprintf(_fd, "echo: %s\n", _receivedMsgs.front().c_str());
+		// dprintf(_fd, "echo: %s\n", _receivedMsgs.front().c_str());
 		if (_msgProcessor && _msgProcessor->live())
 			_msgProcessor->processMsg(
 				*this, _receivedMsgs.front());
+		// if (_receivedMsgs.front() == "quit") _live = false;
 		_receivedMsgs.pop_front();
 	}
 }
@@ -34,8 +35,12 @@ void Client::onRead()
 {
 	char buff[513];
 	int r = read(this->_fd, buff, 512);
-	buff[r] = 0;
-	tools::Parsing::fillList(_receivedMsgs, buff, "\n\r");
+	if (r > 0) {
+		buff[r] = 0;
+		tools::Parsing::fillList(_receivedMsgs, buff, "\n\r");
+	} else {
+		_receivedMsgs.push_front("quit");
+	}
 }
 
 } // namespace io::hdl

@@ -19,6 +19,7 @@ SRCS		=	src/io/Selector.cpp	\
 			src/tools/Parsing.cpp	\
 			src/game/Deck.cpp	\
 			src/game/MilleBornes.cpp	\
+			src/game/Manager.cpp		\
 
 OBJ_MAIN	=	$(MAIN:.cpp=.o)
 
