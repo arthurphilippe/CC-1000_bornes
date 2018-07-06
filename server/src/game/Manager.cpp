@@ -1,4 +1,4 @@
-/*			it->game->start();
+/*
 ** EPITECH PROJECT, 2018
 ** server
 ** File description:
@@ -21,14 +21,17 @@ void Manager::registerHandle(std::unique_ptr<io::hdl::Client> &hdl)
 
 	for (auto it = _waitingGames.begin();
 		it != _waitingGames.end() && !found; std::advance(it, 1)) {
-		it->game->start();
-		(*it).game->processMsg(*hdl, "");
+		it->gameptr->processMsg(*hdl, "");
+
 		found = true;
-		if (it->game->full()) {
-			it->game->start();
-			_processors.emplace_back(it->game);
+		hdl->setMsgProcessor(_waitingGames.back().game);
+		if (it->gameptr->full()) {
+			it->gameptr->start();
+			_processors.emplace_back(it->gameptr);
 			it = _waitingGames.erase(it);
 		}
+		if (it->gameptr->ready())
+			it->tp = std::chrono::system_clock::now();
 	}
 
 	if (!found) {
@@ -36,8 +39,9 @@ void Manager::registerHandle(std::unique_ptr<io::hdl::Client> &hdl)
 		if (!nGame) throw std::runtime_error("Out of memory");
 		_waitingGames.emplace_back();
 		_waitingGames.back().game.reset(nGame);
-		_waitingGames.back().tp = std::chrono::system_clock::now();
+		_waitingGames.back().gameptr = nGame;
 		_waitingGames.back().game->processMsg(*hdl, "");
+		hdl->setMsgProcessor(_waitingGames.back().game);
 	}
 
 	io::hdl::IHandle *interfacedHdl = hdl.release();
@@ -65,9 +69,9 @@ bool Manager::run()
 
 	for (auto it(_waitingGames.begin()); it != _waitingGames.end();
 		std::advance(it, 1)) {
-		if (it->game->ready() && now - it->tp > 2s) {
-			it->game->start();
-			_processors.emplace_back(it->game);
+		if (it->gameptr->ready() && now - it->tp > 2s) {
+			it->gameptr->start();
+			_processors.emplace_back(it->gameptr);
 			it = _waitingGames.erase(it);
 		}
 	}

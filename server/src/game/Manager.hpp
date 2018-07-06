@@ -28,7 +28,8 @@ public:
 
 protected:
 	struct WaitingGame {
-		std::shared_ptr<MilleBornes> game;
+		std::shared_ptr<io::hdl::IMsgProcessor> game;
+		MilleBornes *gameptr;
 		std::chrono::system_clock::time_point tp;
 	};
 	std::list<std::shared_ptr<io::hdl::IMsgProcessor>> _processors;

@@ -45,8 +45,6 @@ void MilleBornes::onCycle() {}
 
 void MilleBornes::start()
 {
-	_currentPlayer = _players.end();
-	_nextPlayer();
 	for (auto &pl : _players) {
 		dump(pl.client.stream(), _players);
 		pl.client.dumpStream();
@@ -55,6 +53,9 @@ void MilleBornes::start()
 		}
 	}
 	_started = true;
+	_currentPlayer = _players.end();
+	_nextPlayer();
+	_currentPlayer->client.dumpStream();
 }
 
 void MilleBornes::runCmd(Player &pl, std::vector<std::string> &splitCmd)
@@ -86,6 +87,8 @@ void MilleBornes::runCmd(Player &pl, std::vector<std::string> &splitCmd)
 		pl.client.stream() << "ok" << std::endl;
 		pl.hand[nb] = _deck.drawCard();
 		_nextPlayer();
+	} else {
+		pl.client.stream() << "ko" << std::endl;
 	}
 }
 

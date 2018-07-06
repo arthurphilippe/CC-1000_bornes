@@ -61,10 +61,15 @@ private:
 	void _onVictory();
 	void _nextPlayer()
 	{
-		_currentPlayer++;
+		if (_currentPlayer != _players.end())
+			std::advance(_currentPlayer, 1);
 		if (_currentPlayer == _players.end())
 			_currentPlayer = _players.begin();
+		dump(_currentPlayer->client.stream(), _currentPlayer->hand);
+		for (auto &pl : _players)
+			dump(_currentPlayer->client.stream(), pl);
 		_currentPlayer->client.stream() << "your_turn" << std::endl;
+		_currentPlayer->client.dumpStream();
 	}
 
 	Card &_playerSelectCard(Player &pl, Card selection)
@@ -77,15 +82,23 @@ private:
 
 	void dump(std::ostream &os, const Player &pl)
 	{
-		os << "playerstate " << pl.distance << " " << pl.hazard << " "
-		   << pl.speedlimited << " " << pl.acePilot << " "
-		   << pl.tankLorry << " " << pl.punctureProof << " "
-		   << pl.pioritised << std::endl;
+		os << "playerstate " << pl.client.id << " " << pl.distance
+		   << " " << pl.hazard << " " << pl.speedlimited << " "
+		   << pl.acePilot << " " << pl.tankLorry << " "
+		   << pl.punctureProof << " " << pl.pioritised << std::endl;
 	}
 	void dump(std::ostream &os, const std::list<Player> &players)
 	{
 		os << "lsplayers";
 		for (const auto &pl : players) os << " " << pl.client.id;
+		os << std::endl;
+	}
+	void dump(std::ostream &os, std::array<Card, 6> &cards)
+	{
+		os << "lscards";
+		for (auto &card : cards) {
+			os << " " << card;
+		}
 		os << std::endl;
 	}
 
