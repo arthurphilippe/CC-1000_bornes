@@ -55,7 +55,6 @@ void MilleBornes::start()
 	_started = true;
 	_currentPlayer = _players.end();
 	_nextPlayer();
-	_currentPlayer->client.dumpStream();
 }
 
 void MilleBornes::runCmd(Player &pl, std::vector<std::string> &splitCmd)
@@ -100,7 +99,7 @@ MilleBornes::Player &MilleBornes::_controlAccess(io::hdl::Client &handle)
 	} catch (...) {
 		if (_players.size() < MAX_PLAYER) {
 			Player tmpPl{
-				{}, handle, 0, Card::NONE, 0, 0, 0, 0, 0, 0};
+				{}, handle, 0, Card::NONE, 0, 0, 0, 0, 0};
 			tmpPl.hand.fill(Card::NONE);
 			_players.push_back(std::move(tmpPl));
 			_currentPlayer = _players.begin();
@@ -152,7 +151,7 @@ bool MilleBornes::useDist(MilleBornes::Player &pl, Card &card)
 {
 	auto ret(false);
 	auto totDist(pl.distance);
-	if (pl.hazard == Card::NONE && pl.light &&
+	if (pl.hazard == Card::NONE &&
 		(!pl.speedlimited || card <= Card::Dst50kms)) {
 		switch (card) {
 		case Card::Dst25kms:

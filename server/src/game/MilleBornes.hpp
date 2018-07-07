@@ -29,7 +29,6 @@ public:
 		unsigned int distance;
 		Card hazard;
 		bool speedlimited;
-		bool light;
 		bool acePilot;
 		bool tankLorry;
 		bool punctureProof;
@@ -72,7 +71,7 @@ private:
 		_currentPlayer->client.dumpStream();
 	}
 
-	Card &_playerSelectCard(Player &pl, Card selection)
+	static inline Card &_playerSelectCard(Player &pl, Card selection)
 	{
 		for (auto &card : pl.hand) {
 			if (card == selection) return card;
@@ -80,20 +79,21 @@ private:
 		throw 0;
 	}
 
-	void dump(std::ostream &os, const Player &pl)
+	static inline void dump(std::ostream &os, const Player &pl)
 	{
 		os << "playerstate " << pl.client.id << " " << pl.distance
 		   << " " << pl.hazard << " " << pl.speedlimited << " "
 		   << pl.acePilot << " " << pl.tankLorry << " "
 		   << pl.punctureProof << " " << pl.pioritised << std::endl;
 	}
-	void dump(std::ostream &os, const std::list<Player> &players)
+	static inline void dump(
+		std::ostream &os, const std::list<Player> &players)
 	{
 		os << "lsplayers";
 		for (const auto &pl : players) os << " " << pl.client.id;
 		os << std::endl;
 	}
-	void dump(std::ostream &os, std::array<Card, 6> &cards)
+	static inline void dump(std::ostream &os, std::array<Card, 6> &cards)
 	{
 		os << "lscards";
 		for (auto &card : cards) {

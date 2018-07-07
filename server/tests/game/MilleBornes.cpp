@@ -122,7 +122,7 @@ Test(MilleBornes, useDist)
 	DumbClient client(stor, proc, filedes[0]);
 
 	game::MilleBornes::Player pl{
-		{}, client, 0, game::Card::NONE, 0, 0, 0, 0, 0, 0};
+		{}, client, 0, game::Card::HazRedLight, 0, 0, 0, 0, 0};
 	game::Card card = game::Card::Dst75kms;
 	cr_expect_not(game->useCard(pl, card));
 	cr_expect_eq(pl.distance, 0);
@@ -130,7 +130,7 @@ Test(MilleBornes, useDist)
 	cr_expect_not(game->useCard(pl, card));
 	cr_expect_eq(pl.distance, 0);
 
-	pl.light = true;
+	pl.hazard = game::Card::NONE;
 	cr_expect(game->useCard(pl, card));
 	cr_expect_eq(pl.distance, 75);
 	cr_expect_eq(card, game::Card::NONE);
@@ -158,11 +158,11 @@ Test(MilleBornes, useDist)
 	cr_expect_eq(card, game::Card::NONE);
 
 	card = game::Card::Dst200kms;
-	pl.light = false;
+	pl.hazard = game::Card::HazGasOutage;
 	cr_expect_not(game->useCard(pl, card));
 	cr_expect_eq(pl.distance, 250);
 	cr_expect_neq(card, game::Card::NONE);
-	pl.light = true;
+	pl.hazard = game::Card::NONE;
 
 	card = game::Card::HazCarCrash;
 	cr_expect_not(game->useDist(pl, card));
@@ -206,7 +206,7 @@ Test(MilleBornes, useDef)
 	DumbClient client(stor, proc, filedes[0]);
 
 	game::MilleBornes::Player pl{
-		{}, client, 0, game::Card::HazFlatTire, 0, 0, 0, 0, 0, 0};
+		{}, client, 0, game::Card::HazFlatTire, 0, 0, 0, 0, 0};
 
 	auto card = game::Card::DefGas;
 	cr_expect_not(game->useCard(pl, card));
@@ -239,9 +239,9 @@ Test(MilleBornes, useHaz)
 	DumbClient client(stor, proc, filedes[0]);
 
 	game::MilleBornes::Player pla{
-		{}, client, 0, game::Card::HazFlatTire, 0, 0, 0, 0, 0, 0};
+		{}, client, 0, game::Card::HazFlatTire, 0, 0, 0, 0, 0};
 	game::MilleBornes::Player plb{
-		{}, client, 0, game::Card::HazFlatTire, 0, 0, 0, 0, 0, 0};
+		{}, client, 0, game::Card::HazFlatTire, 0, 0, 0, 0, 0};
 
 	auto card = game::Card::HazCarCrash;
 	cr_expect_not(game->useCard(pla, card));
@@ -316,7 +316,7 @@ Test(MilleBornes, runCmd)
 	clientb.onCycle();
 
 	game::MilleBornes::Player pl{
-		{}, client, 0, game::Card::NONE, 0, 1, 0, 0, 0, 0};
+		{}, client, 0, game::Card::NONE, 0, 1, 0, 0, 0};
 	pl.hand[4] = game::Card::Dst75kms;
 	std::vector<std::string> splitmsg{
 		std::string{"use"}, std::string{"4"}};
@@ -377,8 +377,8 @@ Test(MilleBornes, start)
 
 	cr_expect(game->ready());
 	game->start();
-	cr_expect_eq(ossa.str(), "lsplayers 1 2\n");
-	cr_expect_eq(ossb.str(), "lsplayers 1 2\n");
+	cr_expect_neq(ossa.str().find("lsplayers 1 2\n"), std::string::npos);
+	cr_expect_neq(ossb.str().find("lsplayers 1 2\n"), std::string::npos);
 	ossa.str("");
 	ossb.str("");
 
@@ -398,9 +398,13 @@ Test(MilleBornes, start)
 	dprintf(filedes[1], "discard 3\n");
 	clientb.onRead();
 	clientb.onCycle();
-	cr_expect_neq(
-		ossb.str(), "not_your_turn\n", "got %s", ossb.str().c_str());
-	cr_expect_eq(
-		ossb.str(), "your_turn\nok\n", "got %s", ossb.str().c_str());
+	cr_log_info(ossb.str().c_str());
+	cr_expect_eq(ossb.str().find("not_your_turn\n"), std::string::npos);
+	cr_expect_neq(ossb.str().find("your_turn\n"), std::string::npos);
+	cr_expect_neq(ossb.str().find("ok\n"), std::string::npos);
+	// cr_expect_neq(
+	// 	ossb.str(), "not_your_turn\n", "got %s", ossb.str().c_str());
+	// cr_expect_eq(
+	// 	ossb.str(), "your_turn\nok\n", "got %s", ossb.str().c_str());
 	ossb.str("");
 }
