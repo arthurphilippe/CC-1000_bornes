@@ -22,12 +22,11 @@ void Manager::registerHandle(std::unique_ptr<io::hdl::Client> &hdl)
 	for (auto it = _waitingGames.begin();
 		it != _waitingGames.end() && !found; std::advance(it, 1)) {
 		it->gameptr->processMsg(*hdl, "");
-
 		found = true;
 		hdl->setMsgProcessor(_waitingGames.back().game);
 		if (it->gameptr->full()) {
 			it->gameptr->start();
-			_processors.emplace_back(it->gameptr);
+			_processors.emplace_back(it->game);
 			it = _waitingGames.erase(it);
 		}
 		if (it->gameptr->ready())
@@ -50,14 +49,11 @@ void Manager::registerHandle(std::unique_ptr<io::hdl::Client> &hdl)
 
 void Manager::registerHandle(std::unique_ptr<io::hdl::IHandle> &hdl)
 {
-	std::cout << "regspe\n";
 	if (hdl->getType() == io::hdl::HType::CLIENT) {
-		std::cout << "regspe2\n";
 		auto *client = static_cast<io::hdl::Client *>(hdl.release());
 		std::unique_ptr<io::hdl::Client> uniqueClient(client);
 		this->registerHandle(uniqueClient);
 	} else {
-		std::cout << "regspe3\n";
 		this->Selector::registerHandle(hdl);
 	}
 }
@@ -71,11 +67,15 @@ bool Manager::run()
 		std::advance(it, 1)) {
 		if (it->gameptr->ready() && now - it->tp > 2s) {
 			it->gameptr->start();
-			_processors.emplace_back(it->gameptr);
+			_processors.emplace_back(it->game);
 			it = _waitingGames.erase(it);
 		}
 	}
-
+	for (auto it(_processors.begin()); it != _processors.end();
+		std::advance(it, 1)) {
+		if (!(*it)->live()) it = _processors.erase(it);
+		if (it == _processors.end()) break;
+	}
 	return ret;
 }
 

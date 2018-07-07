@@ -379,6 +379,8 @@ Test(MilleBornes, start)
 	game->start();
 	cr_expect_neq(ossa.str().find("lsplayers 1 2\n"), std::string::npos);
 	cr_expect_neq(ossb.str().find("lsplayers 1 2\n"), std::string::npos);
+	cr_log_info(ossa.str().c_str());
+	cr_log_info(ossb.str().c_str());
 	ossa.str("");
 	ossb.str("");
 
@@ -402,9 +404,5 @@ Test(MilleBornes, start)
 	cr_expect_eq(ossb.str().find("not_your_turn\n"), std::string::npos);
 	cr_expect_neq(ossb.str().find("your_turn\n"), std::string::npos);
 	cr_expect_neq(ossb.str().find("ok\n"), std::string::npos);
-	// cr_expect_neq(
-	// 	ossb.str(), "not_your_turn\n", "got %s", ossb.str().c_str());
-	// cr_expect_eq(
-	// 	ossb.str(), "your_turn\nok\n", "got %s", ossb.str().c_str());
 	ossb.str("");
 }

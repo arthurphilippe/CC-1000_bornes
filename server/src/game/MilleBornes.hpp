@@ -71,6 +71,9 @@ private:
 		_currentPlayer->client.dumpStream();
 	}
 
+	void _quit(unsigned long id);
+	void _end();
+
 	static inline Card &_playerSelectCard(Player &pl, Card selection)
 	{
 		for (auto &card : pl.hand) {

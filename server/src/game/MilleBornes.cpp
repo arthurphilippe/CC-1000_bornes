@@ -25,13 +25,20 @@ void MilleBornes::processMsg(io::hdl::Client &handle, const std::string &msg)
 {
 	try {
 		auto &pl = _controlAccess(handle);
-		if (!msg.empty() && _started &&
-			_currentPlayer->client.id != handle.id) {
-			pl.client.stream() << "not_your_turn" << std::endl;
-		} else if (!msg.empty() && _started) {
-			auto splitMsg =
-				tools::Parsing::createVectorString(msg, ' ');
-			runCmd(pl, splitMsg);
+		if (!msg.empty()) {
+			if (msg == "quit") {
+				this->_quit(pl.client.id);
+				return;
+			} else if (_started &&
+				_currentPlayer->client.id != handle.id) {
+				pl.client.stream()
+					<< "not_your_turn" << std::endl;
+			} else if (_started) {
+				auto splitMsg =
+					tools::Parsing::createVectorString(
+						msg, ' ');
+				runCmd(pl, splitMsg);
+			}
 		}
 		handle.dumpStream();
 	} catch (const std::exception &) {
@@ -68,6 +75,7 @@ void MilleBornes::runCmd(Player &pl, std::vector<std::string> &splitCmd)
 		return;
 	}
 
+	nb %= 6;
 	auto ret(false);
 	if (splitCmd.front() == "use" && splitCmd.size() == 2) {
 		ret = useCard(pl, pl.hand[nb]);
@@ -108,6 +116,34 @@ MilleBornes::Player &MilleBornes::_controlAccess(io::hdl::Client &handle)
 		}
 	}
 	return this->_getPlayer(handle.id);
+}
+
+void MilleBornes::_quit(unsigned long id)
+{
+	for (auto it(_players.begin()); it != _players.end();
+		std::advance(it, 1)) {
+		if (id == it->client.id) {
+			it->client.setLive(false);
+			_players.erase(it);
+			break;
+		}
+	}
+	if (_players.size() == 1) {
+		auto &pl = _players.front();
+		pl.client.stream() << "forfeit" << std::endl;
+		pl.client.dumpStream();
+		this->_end();
+	}
+}
+
+void MilleBornes::_end()
+{
+	_live = false;
+	for (auto &it : _players) {
+		it.client.stream() << "end" << std::endl;
+		it.client.dumpStream();
+		it.client.setLive(false);
+	}
 }
 
 MilleBornes::Player &MilleBornes::_getPlayer(unsigned long id)
@@ -248,9 +284,8 @@ void MilleBornes::_onVictory()
 	for (auto &it : _players) {
 		it.client.stream() << "winner " << _currentPlayer->client.id
 				   << std::endl;
-		it.client.setLive(false);
 	}
-	_live = false;
+	this->_end();
 }
 
 } // namespace game

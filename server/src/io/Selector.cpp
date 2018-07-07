@@ -39,10 +39,12 @@ void Selector::_setFileDescriptors() noexcept
 
 void Selector::_readOnActiveHandles()
 {
-	for (auto &it : _handles) {
-		auto fd = it->getFd();
-		if (FD_ISSET(fd, &_fdSet)) it->onRead();
-		it->onCycle();
+	for (auto it = _handles.begin(); it != _handles.end();
+		std::advance(it, 1)) {
+		if (FD_ISSET((*it)->getFd(), &_fdSet)) (*it)->onRead();
+		if (!(*it)->live()) it = _handles.erase(it);
+		if (it == _handles.end()) break;
+		(*it)->onCycle();
 	}
 }
 
