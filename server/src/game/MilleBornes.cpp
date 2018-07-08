@@ -120,19 +120,29 @@ MilleBornes::Player &MilleBornes::_controlAccess(io::hdl::Client &handle)
 
 void MilleBornes::_quit(unsigned long id)
 {
+	bool isCurrentPlayer(_currentPlayer->client.id == id);
+
 	for (auto it(_players.begin()); it != _players.end();
 		std::advance(it, 1)) {
 		if (id == it->client.id) {
 			it->client.setLive(false);
-			_players.erase(it);
+			it = _players.erase(it);
+			if (isCurrentPlayer) _currentPlayer = it;
 			break;
 		}
 	}
+
 	if (_players.size() == 1) {
 		auto &pl = _players.front();
 		pl.client.stream() << "forfeit" << std::endl;
 		pl.client.dumpStream();
 		this->_end();
+	} else if (isCurrentPlayer) {
+		dump(_currentPlayer->client.stream(), _currentPlayer->hand);
+		for (auto &pl : _players)
+			dump(_currentPlayer->client.stream(), pl);
+		_currentPlayer->client.stream() << "your_turn" << std::endl;
+		_currentPlayer->client.dumpStream();
 	}
 }
 
