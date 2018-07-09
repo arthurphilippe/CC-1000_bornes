@@ -10,6 +10,9 @@
 #include "game/proc.h"
 #include "list.h"
 
+/*
+ * Does nothing.
+ */
 void game_proc_lsplayers(game_t *ga, list_t *msg)
 {
 	(void) ga;

@@ -25,6 +25,8 @@ SRCS		=	src/list/list.c			\
 			src/game/proc/id.c		\
 			src/game/proc/lscards.c		\
 			src/game/proc/playerstate.c	\
+			src/game/proc/lsplayers.c	\
+			src/game/proc/winner.c		\
 
 OBJ_MAIN	=	$(MAIN:.c=.o)
 
@@ -35,6 +37,7 @@ TEST		=	unit_tests.out
 SRCS_TEST	=	tests/list.c		\
 			tests/stolist.c		\
 			tests/game.c		\
+			tests/game/proc.c	\
 
 SRCS_TEST	+=	$(OBJS)
 
