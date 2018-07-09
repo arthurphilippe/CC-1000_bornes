@@ -15,7 +15,8 @@
  */
 const proc_key_t PROC_MSG_MAP[] = {
 	{"id", game_proc_id},
-	{"lsplayer", game_proc_lsplayers},
+	{"lsplayer", NULL},
+	// {"lsplayer", game_proc_lsplayers},
 	{"playerstate", game_proc_playerstate},
 	{"lscards", game_proc_lscards},
 	{"forfeit", game_proc_winner},
@@ -53,7 +54,7 @@ void game_proc(game_t *ga, const char *line)
 		return;
 	}
 	front = split_msg->l_start->n_data;
-	for (unsigned int i = 0; PROC_MSG_MAP[i].pk_func; i += 1)
+	for (unsigned int i = 0; PROC_MSG_MAP[i].pk_str; i += 1)
 		if (check_and_call(ga, &PROC_MSG_MAP[i], split_msg, front))
 			return;
 	list_destroy(split_msg);
