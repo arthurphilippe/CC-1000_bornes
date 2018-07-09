@@ -30,6 +30,28 @@ Test(GameProc, Id)
 	game_delete(ga);
 }
 
+Test(GameProc, LsPlayers)
+{
+	game_t *ga = game_create();
+
+	cr_assert(ga);
+	for (unsigned int i = 0; i < 6; i += 1)
+		cr_expect_eq(ga->ga_hand[i], NONE);
+	cr_expect_eq(ga->ga_player_nb, 0);
+	cr_expect_eq(ga->ga_id, 0);
+
+	game_proc(ga, "  ");
+	game_proc(ga, "id 12");
+	cr_expect_eq(ga->ga_id, 12, "got %ld instead of %ld", ga->ga_id, 12);
+	game_proc(ga, "id");
+	cr_expect_eq(ga->ga_id, 12, "got %ld instead of %ld", ga->ga_id, 12);
+	game_proc(ga, "id 9 r-tyujkl");
+	cr_expect_eq(ga->ga_id, 12, "got %ld instead of %ld", ga->ga_id, 12);
+	game_proc(ga, "lsplayers 12 45 62");
+	cr_expect_eq(ga->ga_player_nb, 0);
+	game_delete(ga);
+}
+
 Test(GameProc, LsCards)
 {
 	game_t *ga = game_create();
