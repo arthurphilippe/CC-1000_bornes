@@ -27,6 +27,7 @@ Test(GameProc, Id)
 	cr_expect_eq(ga->ga_id, 12, "got %ld instead of %ld", ga->ga_id, 12);
 	game_proc(ga, "id 9 r-tyujkl");
 	cr_expect_eq(ga->ga_id, 12, "got %ld instead of %ld", ga->ga_id, 12);
+	game_delete(ga);
 }
 
 Test(GameProc, LsCards)
@@ -66,6 +67,7 @@ Test(GameProc, LsCards)
 	cr_expect_eq(ga->ga_hand[3], NONE);
 	cr_expect_eq(ga->ga_hand[4], HazCarCrash);
 	cr_expect_eq(ga->ga_hand[5], DefGreenLight);
+	game_delete(ga);
 }
 
 Test(GameProc, PlayerState)
@@ -249,4 +251,5 @@ Test(GameProc, PlayerState)
 	cr_expect_eq(ps->ps_tank, true);
 	cr_expect_eq(ps->ps_puncture_proof, false);
 	cr_expect_eq(ps->ps_prioritised, false);
+	game_delete(ga);
 }

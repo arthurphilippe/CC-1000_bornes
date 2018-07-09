@@ -26,5 +26,6 @@ typedef struct s_game {
 
 // Prototypes
 game_t *game_create(void);
+void game_delete(void *ptr);
 
 #endif /* !GAME_H_ */

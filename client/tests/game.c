@@ -18,4 +18,5 @@ Test(Game, Create)
 		cr_expect_eq(ga->ga_hand[i], NONE);
 	cr_expect_eq(ga->ga_player_nb, 0);
 	cr_expect_eq(ga->ga_id, 0);
+	game_delete(ga);
 }

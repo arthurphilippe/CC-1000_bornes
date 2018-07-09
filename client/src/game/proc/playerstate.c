@@ -11,7 +11,7 @@
 #include "list.h"
 
 /*
- * sets the value pointed by val to the val contained in the given
+ * Sets the value pointed by val to the val contained in the given
  * string
  */
 static void set_bool(bool *val, const char *src) { *val = (src[0] == '1'); }
