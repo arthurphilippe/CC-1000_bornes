@@ -57,4 +57,12 @@ Test(GameProc, LsCards)
 	cr_expect_eq(ga->ga_hand[3], SpePrioritised);
 	cr_expect_eq(ga->ga_hand[4], HazCarCrash);
 	cr_expect_eq(ga->ga_hand[5], DefGreenLight);
+
+	game_proc(ga, "lscards 7 patate 16 20 0 9");
+	cr_expect_eq(ga->ga_hand[0], DefSpareWheel);
+	cr_expect_eq(ga->ga_hand[1], NONE);
+	cr_expect_eq(ga->ga_hand[2], Dst75kms);
+	cr_expect_eq(ga->ga_hand[3], NONE);
+	cr_expect_eq(ga->ga_hand[4], HazCarCrash);
+	cr_expect_eq(ga->ga_hand[5], DefGreenLight);
 }
