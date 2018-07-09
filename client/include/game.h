@@ -17,10 +17,10 @@
 // Game structure
 typedef struct s_game {
 	player_state_t ga_players[6];
+	card_t ga_hand[6];
 	unsigned long ga_id;
 	unsigned long ga_id_winner;
 	unsigned int ga_player_nb;
-	card_t ga_hand[6];
 	bool ga_live;
 } game_t;
 

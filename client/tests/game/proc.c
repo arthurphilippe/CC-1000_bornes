@@ -275,3 +275,39 @@ Test(GameProc, PlayerState)
 	cr_expect_eq(ps->ps_prioritised, false);
 	game_delete(ga);
 }
+
+Test(GameProc, Winner)
+{
+	game_t *ga = game_create();
+
+	cr_assert(ga);
+	for (unsigned int i = 0; i < 6; i += 1)
+		cr_expect_eq(ga->ga_hand[i], NONE);
+	cr_expect_eq(ga->ga_player_nb, 0);
+	cr_expect_eq(ga->ga_id, 0);
+
+	game_proc(ga, "id 12");
+	cr_expect_eq(ga->ga_id, 12, "got %ld instead of %ld", ga->ga_id, 12);
+	game_proc(ga, "winner 79");
+	cr_expect_eq(ga->ga_id_winner, 79);
+	cr_expect_eq(ga->ga_live, false);
+	game_delete(ga);
+}
+
+Test(GameProc, Forfeit)
+{
+	game_t *ga = game_create();
+
+	cr_assert(ga);
+	for (unsigned int i = 0; i < 6; i += 1)
+		cr_expect_eq(ga->ga_hand[i], NONE);
+	cr_expect_eq(ga->ga_player_nb, 0);
+	cr_expect_eq(ga->ga_id, 0);
+
+	game_proc(ga, "id 12");
+	cr_expect_eq(ga->ga_id, 12, "got %ld instead of %ld", ga->ga_id, 12);
+	game_proc(ga, "forfeit");
+	cr_expect_eq(ga->ga_id_winner, 0);
+	cr_expect_eq(ga->ga_live, false);
+	game_delete(ga);
+}
