@@ -9,10 +9,11 @@
 #define PROC_H_
 
 typedef struct s_game game_t;
+typedef struct s_list list_t;
 
 typedef struct s_proc_key {
 	const char *pk_str;
-	void (*pk_func)(game_t *ga, const char *str);
+	void (*pk_func)(game_t *ga, list_t *msg);
 } proc_key_t;
 
 #endif /* !PROC_H_ */

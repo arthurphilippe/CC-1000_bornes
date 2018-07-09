@@ -15,6 +15,7 @@ typedef struct s_player_state {
 	unsigned long ps_id;
 	unsigned int ps_dist;
 	card_t ps_incident;
+	bool ps_limited;
 	bool ps_ace;
 	bool ps_tank;
 	bool ps_puncture_proof;

@@ -21,6 +21,10 @@ SRCS		=	src/list/list.c			\
 			src/list/find.c			\
 			src/stolist.c			\
 			src/game/create.c		\
+			src/game/proc/proc.c		\
+			src/game/proc/id.c		\
+			src/game/proc/lscards.c		\
+			src/game/proc/playerstate.c	\
 
 OBJ_MAIN	=	$(MAIN:.c=.o)
 

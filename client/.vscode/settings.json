@@ -2,6 +2,7 @@
 	"editor.formatOnSave": true,
 	"files.associations": {
 		"game.h": "c",
-		"assert.h": "c"
+		"assert.h": "c",
+		"player_state.h": "c"
 	}
 }
