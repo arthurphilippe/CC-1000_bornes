@@ -10,10 +10,21 @@
 
 #include "player_state.h"
 
+#ifndef NULL
+#	define NULL (void *) 0
+#endif /* NULL*/
+
+// Game structure
 typedef struct s_game {
-	unsigned long ga_id;
 	player_state_t ga_players[6];
+	unsigned long ga_id;
+	unsigned long ga_id_winner;
+	unsigned int ga_player_nb;
 	card_t ga_hand[6];
+	bool ga_live;
 } game_t;
+
+// Prototypes
+game_t *game_create(void);
 
 #endif /* !GAME_H_ */

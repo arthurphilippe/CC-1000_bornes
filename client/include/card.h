@@ -9,7 +9,7 @@
 #define CARD_H_
 
 typedef enum e_card {
-	HazCarCrash = 20,
+	HazCarCrash = 0,
 	HazGasOutage,
 	HazFlatTire,
 	HazSpeedLimit,

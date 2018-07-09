@@ -32,3 +32,4 @@
 *.app
 
 server/game_server
+client/game_client

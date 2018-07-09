@@ -20,6 +20,7 @@ SRCS		=	src/list/list.c			\
 			src/list/push.c			\
 			src/list/find.c			\
 			src/stolist.c			\
+			src/game/create.c		\
 
 OBJ_MAIN	=	$(MAIN:.c=.o)
 
@@ -29,6 +30,7 @@ TEST		=	unit_tests.out
 
 SRCS_TEST	=	tests/list.c		\
 			tests/stolist.c		\
+			tests/game.c		\
 
 SRCS_TEST	+=	$(OBJS)
 

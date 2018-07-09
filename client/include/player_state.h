@@ -8,6 +8,7 @@
 #ifndef PLAYER_STATE_H_
 #define PLAYER_STATE_H_
 
+#include <stdbool.h>
 #include "card.h"
 
 typedef struct s_player_state {
