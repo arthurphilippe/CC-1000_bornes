@@ -44,14 +44,13 @@ public:
 	bool ready() const noexcept { return (_players.size() >= 2); }
 	bool full() const noexcept { return (_players.size() >= 6); }
 
+	void runCmd(Player &pl, std::vector<std::string> &splitCmd);
 	bool useCard(Player &pl, Card &card);
 	bool useCard(Player &pl, Card &card, Player &foe);
 	bool useDefense(Player &pl, Card &card);
 	bool useDist(Player &pl, Card &card);
 	bool useHazard(Player &pl, Card &card, Player &foe);
 	bool useSpecial(Player &pl, Card &card);
-
-	void runCmd(Player &pl, std::vector<std::string> &splitCmd);
 
 private:
 	Player &_getPlayer(unsigned long id);

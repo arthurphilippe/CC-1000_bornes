@@ -1,0 +1,55 @@
+SortIncludes: 'true'
+AlignAfterOpenBracket: 'DontAlign'
+AlignConsecutiveAssignments: 'false'
+AlignConsecutiveDeclarations: 'false'
+AlignOperands: 'false'
+AlignTrailingComments: 'false'
+AccessModifierOffset: 0
+ColumnLimit: 78
+IndentWidth: 8
+TabWidth: 8
+ContinuationIndentWidth: 8
+AccessModifierOffset: -8
+UseTab: Always
+AllowShortFunctionsOnASingleLine: true
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
+AlwaysBreakTemplateDeclarations: true
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: false
+  AfterControlStatement: false
+  AfterEnum: false
+  AfterFunction: true
+  AfterNamespace: false
+  AfterObjCDeclaration: false
+  AfterStruct: false
+  AfterUnion: false
+  AfterExternBlock: false
+  BeforeCatch: false
+  BeforeElse: false
+  IndentBraces: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: true
+  SplitEmptyNamespace: false
+
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+ConstructorInitializerIndentWidth: 8
+IndentCaseLabels: false
+MaxEmptyLinesToKeep: 1
+NamespaceIndentation: Inner
+PointerBindsToType: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeParens: ControlStatements
+SpacesBeforeTrailingComments: 1
+SpacesInCStyleCastParentheses: false
+SpaceAfterCStyleCast: true
+IncludeBlocks: Merge
+IndentPPDirectives: AfterHash
+IncludeCategories:
+  - Regex:           '^(<)'
+    Priority:        2
+  - Regex:           '^(")'
+    Priority:        3
+  - Regex:           '.*'
+    Priority:        1

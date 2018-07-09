@@ -15,7 +15,6 @@ int main(int ac, char **av)
 	auto ret(0);
 	if (ac >= 2) {
 		try {
-
 			auto portnb(std::stoi(av[1]));
 			game::Manager stor;
 			std::unique_ptr<io::hdl::IHandle> listener(

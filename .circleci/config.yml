@@ -42,30 +42,48 @@ jobs:
           command: make CXX=clang++
           working_directory: ~/project/server
 
-  server_epitest:
+  client_test:
     docker:
-      - image: epitechcontent/epitest-docker
+      - image: arthurphilippe/epitech-c-cpp-plain
     steps:
       - checkout
       - run:
           name: Build Project
-          command: make -j 4
-          working_directory: ~/project/server
+          command: make
+          working_directory: ~/project/client
       - run:
           name: Build Unit Tests Suites
-          command: make tests -j 4
-          working_directory: ~/project/server
+          command: make tests
+          working_directory: ~/project/client
       - run:
           name: Tidy up
           command: make clean
-          working_directory: ~/project/server
+          working_directory: ~/project/client
       - run:
           name: Unit Tests Execution
-          command: ./unit_tests.out -j 1 --xml=tests/results.xml --always-succeed
-          working_directory: ~/project/server
+          command: ./unit_tests.out -j 1 --verbose --xml=tests/results.xml --always-succeed
+          working_directory: ~/project/client
       - store_test_results:
           path: .
-          working_directory: ~/project/server
+          working_directory: ~/project/client
+      - run:
+          name: Code Coverage - Processing
+          command: ./tests/coverage.sh html
+          working_directory: ~/project/client
+      - store_artifacts:
+          path: ~/project/client/coverage
+          destination: coverage
+
+  client_build_clang:
+    docker:
+      - image: arthurphilippe/clang
+    steps:
+      - checkout
+      - run:
+          name: Build Project Using clang
+          command: make CXX=clang++
+          working_directory: ~/project/client
+
 
 workflows:
   version: 2
@@ -73,13 +91,5 @@ workflows:
     jobs:
       - server_test
       - server_build_clang
-  planned:
-    triggers:
-      - schedule:
-          cron: "0 21 * * *"
-          filters:
-            branches:
-              only:
-                - master
-    jobs:
-      - server_epitest
+      - client_test
+      - client_build_clang
