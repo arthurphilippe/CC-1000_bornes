@@ -20,6 +20,7 @@ Test(GameProc, Id)
 	cr_expect_eq(ga->ga_player_nb, 0);
 	cr_expect_eq(ga->ga_id, 0);
 
+	game_proc(ga, "  ");
 	game_proc(ga, "id 12");
 	cr_expect_eq(ga->ga_id, 12, "got %ld instead of %ld", ga->ga_id, 12);
 	game_proc(ga, "id");
