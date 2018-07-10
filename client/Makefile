@@ -19,7 +19,7 @@ SRCS		=	src/list/list.c			\
 			src/list/pop.c			\
 			src/list/push.c			\
 			src/list/find.c			\
-			src/stolist.c			\
+			src/list/stolist.c		\
 			src/game/create.c		\
 			src/game/delete.c		\
 			src/game/connect.c		\

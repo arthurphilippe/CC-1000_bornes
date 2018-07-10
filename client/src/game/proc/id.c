@@ -11,7 +11,7 @@
 #include "list.h"
 
 /*
- * Sets the player"s id.
+ * Sets the player's id.
  */
 void game_proc_id(game_t *ga, list_t *msg)
 {

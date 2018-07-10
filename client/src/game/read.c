@@ -8,4 +8,4 @@
 #include "game.h"
 #include "game/proc.h"
 
-// bool
+bool game_read(game_t *ga) {}
