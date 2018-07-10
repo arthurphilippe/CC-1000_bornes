@@ -21,11 +21,13 @@ typedef struct s_game {
 	unsigned long ga_id;
 	unsigned long ga_id_winner;
 	unsigned int ga_player_nb;
+	int ga_socketfd;
 	bool ga_live;
 } game_t;
 
 // Prototypes
 game_t *game_create(void);
 void game_delete(void *ptr);
+int game_connect(game_t *ga, const char *arg_str);
 
 #endif /* !GAME_H_ */

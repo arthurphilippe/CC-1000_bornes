@@ -20,3 +20,12 @@ Test(Game, Create)
 	cr_expect_eq(ga->ga_id, 0);
 	game_delete(ga);
 }
+
+Test(Game, Connection)
+{
+	game_t *ga = game_create();
+
+	cr_assert(ga);
+	cr_expect_neq(game_connect(ga, "google.fr:443"), -1);
+	cr_expect_neq(ga->ga_socketfd, -1);
+}

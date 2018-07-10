@@ -22,6 +22,7 @@ SRCS		=	src/list/list.c			\
 			src/stolist.c			\
 			src/game/create.c		\
 			src/game/delete.c		\
+			src/game/connect.c		\
 			src/game/proc/proc.c		\
 			src/game/proc/id.c		\
 			src/game/proc/lscards.c		\
