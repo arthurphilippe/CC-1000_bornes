@@ -96,6 +96,7 @@ void MilleBornes::runCmd(Player &pl, std::vector<std::string> &splitCmd)
 		_nextPlayer();
 	} else {
 		pl.client.stream() << "ko" << std::endl;
+		_yourTurn();
 	}
 }
 

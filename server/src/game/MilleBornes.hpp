@@ -63,6 +63,10 @@ private:
 			std::advance(_currentPlayer, 1);
 		if (_currentPlayer == _players.end())
 			_currentPlayer = _players.begin();
+		_yourTurn();
+	}
+	void _yourTurn()
+	{
 		dump(_currentPlayer->client.stream(), _currentPlayer->hand);
 		for (auto &pl : _players)
 			dump(_currentPlayer->client.stream(), pl);
