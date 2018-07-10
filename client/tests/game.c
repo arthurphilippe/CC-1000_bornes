@@ -36,7 +36,7 @@ Test(Game, ConnectionError1)
 	game_t *ga = game_create();
 
 	cr_assert(ga);
-	cr_expect_eq(game_connect(ga, "google.fr:443:fsqldjk"), -1);
+	cr_expect_eq(game_connect(ga, "google.fr"), -1);
 	cr_expect_eq(ga->ga_socketfd, -1);
 	cr_expect_eq(ga->ga_live, false);
 }
