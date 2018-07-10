@@ -24,6 +24,8 @@ SRCS		=	src/list/list.c			\
 			src/game/delete.c		\
 			src/game/connect.c		\
 			src/game/proc/id.c		\
+			src/game/proc/ko.c	\
+			src/game/proc/ok.c	\
 			src/game/proc/lscards.c		\
 			src/game/proc/lsplayers.c	\
 			src/game/proc/playerstate.c	\

@@ -1,5 +1,5 @@
 /*
-** EPITECH PROJECT, 2018
+** COBRA CODING CLUB PROJECT
 ** client
 ** File description:
 ** line
@@ -21,6 +21,7 @@ const proc_key_t PROC_MSG_MAP[] = {
 	{"lscards", game_proc_lscards},
 	{"forfeit", game_proc_winner},
 	{"winner", game_proc_winner},
+	{"ko", game_proc_ko},
 	{NULL, NULL},
 };
 

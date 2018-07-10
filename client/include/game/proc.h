@@ -1,5 +1,5 @@
 /*
-** EPITECH PROJECT, 2018
+** COBRA CODING CLUB PROJECT
 ** client
 ** File description:
 ** proc
@@ -31,5 +31,7 @@ void game_proc_lscards(game_t *ga, list_t *msg);
 void game_proc_lsplayers(game_t *ga, list_t *msg);
 void game_proc_playerstate(game_t *ga, list_t *msg);
 void game_proc_winner(game_t *ga, list_t *msg);
+void game_proc_ko(game_t *ga, list_t *msg);
+void game_proc_ok(game_t *ga, list_t *msg);
 
 #endif /* !PROC_H_ */

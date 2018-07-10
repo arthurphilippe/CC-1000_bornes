@@ -26,4 +26,10 @@ list_t *stolist(const char *str, const char *spacers);
  */
 list_t *stolist_existing(list_t *list, const char *str, const char *spacers);
 
+/**
+ * stolist_suffixed will behave like stolist but will stop spliting words
+ * after encountering a colon ':'.
+ */
+list_t *stolist_suffixed(const char *str, const char *spacers);
+
 #endif /* !STOLIST_H_ */

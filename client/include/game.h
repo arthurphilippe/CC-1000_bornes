@@ -1,5 +1,5 @@
 /*
-** EPITECH PROJECT, 2018
+** COBRA CODING CLUB PROJECT
 ** client
 ** File description:
 ** game
@@ -23,6 +23,7 @@ typedef struct s_game {
 	unsigned int ga_player_nb;
 	int ga_socketfd;
 	bool ga_live;
+	bool ga_carry;
 } game_t;
 
 // Prototypes

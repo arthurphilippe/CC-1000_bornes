@@ -9,6 +9,18 @@
 #include <iostream>
 #include "tools/Parsing.hpp"
 
+/**
+ * Dear reader,
+ *
+ * This class's code is a mess. I only had a short while of time to finish its
+ * implementation.
+ * Please don't be to harsh on me.
+ *
+ * Your's trully,
+ *
+ * ~ Thy kind develloper
+ */
+
 namespace game {
 
 MilleBornes::MilleBornes()
@@ -66,12 +78,18 @@ void MilleBornes::start()
 
 void MilleBornes::runCmd(Player &pl, std::vector<std::string> &splitCmd)
 {
-	if (splitCmd.size() <= 1) return;
+	if (splitCmd.size() <= 1) {
+		pl.client.stream() << "ko" << std::endl;
+		_yourTurn();
+		return;
+	}
 
 	unsigned int nb;
 	try {
 		nb = std::stoi(splitCmd[1]);
 	} catch (...) {
+		pl.client.stream() << "ko" << std::endl;
+		_yourTurn();
 		return;
 	}
 
@@ -84,6 +102,8 @@ void MilleBornes::runCmd(Player &pl, std::vector<std::string> &splitCmd)
 			auto id(std::stoul(splitCmd[2]));
 			ret = useCard(pl, pl.hand[nb], _getPlayer(id));
 		} catch (...) {
+			pl.client.stream() << "ko" << std::endl;
+			_yourTurn();
 			return;
 		}
 	} else if (splitCmd.front() == "discard") {
@@ -224,7 +244,14 @@ bool MilleBornes::useDist(MilleBornes::Player &pl, Card &card)
 			pl.distance = totDist;
 			ret = true;
 			if (pl.distance == 1000) this->_onVictory();
+		} else {
+			pl.client.stream() << "info :total distance cannot "
+					   << "exceed 1000 kms." << std::endl;
 		}
+	} else {
+		pl.client.stream() << "info :either you are speedlimited or "
+				      "you were involved in an incident."
+				   << std::endl;
 	}
 	return ret;
 }
@@ -240,6 +267,10 @@ bool MilleBornes::useDefense(MilleBornes::Player &pl, Card &card)
 	} else if (pl.speedlimited && card == Card::DefEndOfLimit) {
 		pl.speedlimited = false;
 		ret = true;
+	} else {
+		pl.client.stream()
+			<< "info :the provided defensive card doesn't match "
+			<< "your current predicament." << std::endl;
 	}
 	return ret;
 }
@@ -253,9 +284,11 @@ bool MilleBornes::useHazard(Player &pl, Card &card, Player &other)
 		(card == Card::HazGasOutage && other.tankLorry) ||
 		(card == Card::HazFlatTire && other.punctureProof) ||
 		(card == Card::HazRedLight && other.pioritised) ||
-		(card == Card::HazSpeedLimit && other.pioritised))
+		(card == Card::HazSpeedLimit && other.pioritised)) {
+		pl.client.stream() << "info :the targetd player is"
+				   << " immune to your attack." << std::endl;
 		ret = false;
-	else if (card != Card::HazSpeedLimit)
+	} else if (card != Card::HazSpeedLimit)
 		other.hazard = card;
 	else
 		other.speedlimited = true;
