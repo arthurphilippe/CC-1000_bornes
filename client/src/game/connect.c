@@ -6,6 +6,7 @@
 */
 
 #include <arpa/inet.h>
+#include <errno.h>
 #include <netdb.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,7 +34,10 @@ int socket_create_and_connect(char *host, int port)
 	memset(&addr, 0, sizeof(struct sockaddr_in));
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
-	if ((ip = gethostbyname(host)) == NULL) return (-1);
+	if ((ip = gethostbyname(host)) == NULL) {
+		errno = EHOSTUNREACH;
+		return (-1);
+	}
 	serv_char_ip = (struct in_addr **) ip->h_addr_list;
 	inet_pton(AF_INET, inet_ntoa(*serv_char_ip[0]), &addr.sin_addr);
 	fd = socket(AF_INET, SOCK_STREAM, pt->p_proto);

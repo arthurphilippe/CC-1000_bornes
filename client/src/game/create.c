@@ -18,5 +18,6 @@ game_t *game_create(void)
 	if (!ga) return (NULL);
 	ga->ga_live = true;
 	for (unsigned int i = 0; i < 6; i += 1) ga->ga_hand[i] = NONE;
+	ga->ga_socketfd = -1;
 	return (ga);
 }
