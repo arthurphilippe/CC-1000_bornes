@@ -43,12 +43,17 @@ public:
 	}
 	virtual void setLive(bool status) noexcept { _live = status; }
 
+	const unsigned int id;
+	static std::list<Selector *> launchedSelectors;
+
 protected:
 	void _select();
 	void _setFileDescriptors() noexcept;
 	void _readOnActiveHandles();
-	std::list<std::unique_ptr<hdl::IHandle>> _handles;
+	static void __uponsignal(int signum);
 
+	std::list<std::unique_ptr<hdl::IHandle>> _handles;
+	static unsigned int __nextId;
 	bool _live;
 	int _highestSetFd;
 	fd_set _fdSet;
