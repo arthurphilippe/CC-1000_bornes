@@ -56,6 +56,6 @@ void game_proc(game_t *ga, const char *line)
 	front = split_msg->l_start->n_data;
 	for (unsigned int i = 0; PROC_MSG_MAP[i].pk_str; i += 1)
 		if (check_and_call(ga, &PROC_MSG_MAP[i], split_msg, front))
-			return;
+			break;
 	list_destroy(split_msg);
 }

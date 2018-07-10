@@ -19,8 +19,12 @@ int main(int ac, char **av)
 	game_connect(ga, av[1]);
 	if (!ga->ga_live) {
 		dprintf(2, "%s\n", "failed to connect, exiting!");
+		game_delete(ga);
 		return (84);
 	}
 	dprintf(ga->ga_socketfd, "%s\n", "hello jafar");
+	while (game_read(ga)) {
+		dprintf(2, "run\n");
+	}
 	game_delete(ga);
 }

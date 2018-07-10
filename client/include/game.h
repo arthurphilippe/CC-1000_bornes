@@ -29,5 +29,6 @@ typedef struct s_game {
 game_t *game_create(void);
 void game_delete(void *ptr);
 int game_connect(game_t *ga, const char *arg_str);
+bool game_read(game_t *ga);
 
 #endif /* !GAME_H_ */

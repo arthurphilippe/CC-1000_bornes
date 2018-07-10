@@ -16,7 +16,7 @@ void game_delete(void *ptr)
 {
 	game_t *ga = ptr;
 
-	free(ga);
 	if (ga->ga_socketfd != 0 && ga->ga_socketfd != -1)
 		close(ga->ga_socketfd);
+	free(ga);
 }
