@@ -158,12 +158,8 @@ void MilleBornes::_quit(unsigned long id)
 		pl.client.stream() << "forfeit" << std::endl;
 		pl.client.dumpStream();
 		this->_end();
-	} else if (isCurrentPlayer) {
-		dump(_currentPlayer->client.stream(), _currentPlayer->hand);
-		for (auto &pl : _players)
-			dump(_currentPlayer->client.stream(), pl);
-		_currentPlayer->client.stream() << "your_turn" << std::endl;
-		_currentPlayer->client.dumpStream();
+	} else if (!_players.empty() && isCurrentPlayer) {
+		_yourTurn();
 	}
 }
 
@@ -216,7 +212,7 @@ bool MilleBornes::useCard(Player &pl, Card &card, Player &foe)
 
 bool MilleBornes::useDist(MilleBornes::Player &pl, Card &card)
 {
-	auto ret(false);
+	auto ret(true);
 	auto totDist(pl.distance);
 	if (pl.hazard == Card::NONE &&
 		(!pl.speedlimited || card <= Card::Dst50kms)) {
@@ -237,21 +233,24 @@ bool MilleBornes::useDist(MilleBornes::Player &pl, Card &card)
 			totDist += 200;
 			break;
 		default:
-			totDist = 1001;
+			ret = false;
 			break;
 		}
-		if (totDist <= 1000) {
-			pl.distance = totDist;
-			ret = true;
-			if (pl.distance == 1000) this->_onVictory();
-		} else {
-			pl.client.stream() << "info :total distance cannot "
-					   << "exceed 1000 kms." << std::endl;
-		}
+		pl.distance = totDist;
+		if (ret && pl.distance >= 1000) this->_onVictory();
+		// if (totDist <= 1000) {
+		// 	pl.distance = totDist;
+		// 	ret = true;
+		// 	if (pl.distance == 1000) this->_onVictory();
+		// } else {
+		// 	pl.client.stream() << "info :total distance cannot "
+		// 			   << "exceed 1000 kms." << std::endl;
+		// }
 	} else {
 		pl.client.stream() << "info :either you are speedlimited or "
 				      "you were involved in an incident."
 				   << std::endl;
+		ret = false;
 	}
 	return ret;
 }
@@ -277,7 +276,6 @@ bool MilleBornes::useDefense(MilleBornes::Player &pl, Card &card)
 
 bool MilleBornes::useHazard(Player &pl, Card &card, Player &other)
 {
-	(void) pl;
 	auto ret(true);
 	if ((other.hazard != Card::NONE && card != Card::HazSpeedLimit) ||
 		(card == Card::HazCarCrash && other.acePilot) ||

@@ -12,7 +12,7 @@
 #include "game/proc.h"
 #include "list.h"
 
-/*
+/**
  * Modifies the player's hand with information recieved by the server.
  *
  * Also clears the player statuses.

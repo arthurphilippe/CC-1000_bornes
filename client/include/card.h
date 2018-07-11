@@ -11,20 +11,20 @@
 typedef enum e_card {
 	HazCarCrash = 0,
 	HazGasOutage,
-	HazFlatTire,
-	HazSpeedLimit,
-	HazRedLight,
+	HazFlatTire, //		Disabled for 13-07-2018's session
+	HazSpeedLimit, //	Disabled for 13-07-2018's session
+	HazRedLight, //		Disabled for 13-07-2018's session
 
 	DefRepair,
 	DefGas,
-	DefSpareWheel,
-	DefEndOfLimit,
-	DefGreenLight,
+	DefSpareWheel, //	Disabled for 13-07-2018's session
+	DefEndOfLimit, //	Disabled for 13-07-2018's session
+	DefGreenLight, //	Disabled for 13-07-2018's session
 
 	SpeAcePilot,
 	SpeTankLorry,
-	SpePunctureProof,
-	SpePrioritised,
+	SpePunctureProof, //	Disabled for 13-07-2018's session
+	SpePrioritised, //	Disabled for 13-07-2018's session
 
 	Dst25kms,
 	Dst50kms,

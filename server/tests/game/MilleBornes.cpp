@@ -189,10 +189,14 @@ Test(MilleBornes, useDist)
 	cr_expect_eq(pl.distance, 850);
 	cr_expect_eq(card, game::Card::NONE);
 
-	card = game::Card::Dst200kms;
-	cr_expect_not(game->useCard(pl, card));
-	cr_expect_eq(pl.distance, 850);
-	cr_expect_neq(card, game::Card::NONE);
+	/**
+	 * Theses assertions were suppored to pass when distance was capped at
+	 * 1000
+	 */
+	// card = game::Card::Dst200kms;
+	// cr_expect_not(game->useCard(pl, card));
+	// cr_expect_eq(pl.distance, 850);
+	// cr_expect_neq(card, game::Card::NONE);
 }
 
 Test(MilleBornes, useDef)

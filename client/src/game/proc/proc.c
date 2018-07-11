@@ -15,13 +15,15 @@
  */
 const proc_key_t PROC_MSG_MAP[] = {
 	{"id", game_proc_id},
-	{"lsplayer", NULL},
-	// {"lsplayer", game_proc_lsplayers},
 	{"playerstate", game_proc_playerstate},
 	{"lscards", game_proc_lscards},
-	{"forfeit", game_proc_winner},
-	{"winner", game_proc_winner},
+	{"ok", game_proc_ok},
 	{"ko", game_proc_ko},
+	{"info", game_proc_info},
+	{"lsplayer", NULL},
+	{"forfeit", game_proc_winner},
+	// {"lsplayer", game_proc_lsplayers},
+	{"winner", game_proc_winner},
 	{NULL, NULL},
 };
 
@@ -46,7 +48,7 @@ static bool check_and_call(
  */
 void game_proc(game_t *ga, const char *line)
 {
-	list_t *split_msg = stolist(line, " ");
+	list_t *split_msg = stolist_suffixed(line, " ");
 	const char *front;
 
 	if (!split_msg) return;

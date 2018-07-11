@@ -43,7 +43,7 @@ void Listener::onRead()
 
 	socket = accept(_fd, (struct sockaddr *) &sin, &sin_len);
 	if (socket == -1) throw std::runtime_error(strerror(errno));
-	dprintf(socket, "%s\n", "Welcome");
+	dprintf(socket, "%s\n", "info :Welcome");
 	std::unique_ptr<IHandle> tmpHdl(new io::hdl::Client(_stor, socket));
 	if (!tmpHdl) close(socket);
 	_stor.registerHandle(tmpHdl);

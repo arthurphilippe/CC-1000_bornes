@@ -22,16 +22,21 @@ SRCS		=	src/list/list.c			\
 			src/list/stolist.c		\
 			src/game/create.c		\
 			src/game/delete.c		\
+			src/game/use.c			\
+			src/game/discard.c		\
 			src/game/connect.c		\
 			src/game/proc/id.c		\
-			src/game/proc/ko.c	\
-			src/game/proc/ok.c	\
+			src/game/proc/info.c		\
+			src/game/proc/ko.c		\
+			src/game/proc/ok.c		\
 			src/game/proc/lscards.c		\
 			src/game/proc/lsplayers.c	\
 			src/game/proc/playerstate.c	\
 			src/game/proc/proc.c		\
 			src/game/read.c			\
 			src/game/proc/winner.c		\
+			src/strat/find_best_dist.c	\
+			src/strat/select_and_run.c	\
 
 OBJ_MAIN	=	$(MAIN:.c=.o)
 

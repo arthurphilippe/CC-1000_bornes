@@ -172,29 +172,6 @@ Test(GameProc, PlayerState)
 	cr_expect_eq(ps->ps_puncture_proof, false);
 	cr_expect_eq(ps->ps_prioritised, false);
 
-	game_proc(ga, "playerstate 5 775 20 1 0 1 0 0");
-	ps = &ga->ga_players[5];
-
-	cr_expect_eq(ps->ps_id, 5);
-	cr_expect_eq(ps->ps_dist, 775);
-	cr_expect_eq(ps->ps_incident, NONE);
-	cr_expect_eq(ps->ps_limited, true);
-	cr_expect_eq(ps->ps_ace, false);
-	cr_expect_eq(ps->ps_tank, true);
-	cr_expect_eq(ps->ps_puncture_proof, false);
-	cr_expect_eq(ps->ps_prioritised, false);
-
-	game_proc(ga, "playerstate 5 775 20 1 0 1 0 0");
-	ps = &ga->ga_players[5];
-
-	cr_expect_eq(ps->ps_id, 5);
-	cr_expect_eq(ps->ps_dist, 775);
-	cr_expect_eq(ps->ps_incident, NONE);
-	cr_expect_eq(ps->ps_limited, true);
-	cr_expect_eq(ps->ps_ace, false);
-	cr_expect_eq(ps->ps_tank, true);
-	cr_expect_eq(ps->ps_puncture_proof, false);
-	cr_expect_eq(ps->ps_prioritised, false);
 	ps = &ga->ga_players[4];
 	cr_expect_eq(ps->ps_id, 5);
 	cr_expect_eq(ps->ps_dist, 900);

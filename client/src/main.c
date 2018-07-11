@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include "game.h"
+#include "strat.h"
 
 int main(int ac, char **av)
 {
@@ -24,7 +25,8 @@ int main(int ac, char **av)
 	}
 	dprintf(ga->ga_socketfd, "%s\n", "hello jafar");
 	while (game_read(ga)) {
-		dprintf(2, "run\n");
+		dprintf(2, "loop\n");
+		strat_select_and_run(ga);
 	}
 	game_delete(ga);
 }

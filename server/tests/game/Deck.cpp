@@ -11,6 +11,7 @@
 
 Test(Deck, 1_cards)
 {
+	cr_log_warn("this test will most likely fail");
 	game::Deck deck;
 	const auto &cards = deck.getCards();
 
@@ -30,6 +31,7 @@ Test(Deck, 1_cards)
 
 Test(Deck, 2_drawCard)
 {
+	cr_log_warn("this test will most likely fail");
 	game::Deck deck;
 	const auto &cards = deck.getCards();
 
