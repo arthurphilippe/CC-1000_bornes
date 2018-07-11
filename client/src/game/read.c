@@ -5,6 +5,7 @@
 ** read
 */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -24,6 +25,19 @@ static int read_and_fill_queue(game_t *ga, list_t *msgq)
 	return (r);
 }
 
+static void show_msgq(list_t *msgq)
+{
+	list_iter_t iter;
+	char *tmp;
+
+	if (!list_get_size(msgq)) return;
+	printf("%s\n", ":: Showing recieved messages:");
+	list_iter_init(&iter, msgq, FWD);
+	while ((tmp = list_iter_next(&iter))) {
+		printf(" - \"%s\"\n", tmp);
+	}
+}
+
 bool game_read(game_t *ga)
 {
 	list_t *msgq = list_create(free);
@@ -31,7 +45,9 @@ bool game_read(game_t *ga)
 	int ret;
 
 	if (!msgq) return false;
+	printf("%s\n", ":: Waiting for server messages...");
 	while (!status && (ret = read_and_fill_queue(ga, msgq))) {
+		show_msgq(msgq);
 		while (list_get_size(msgq)) {
 			if (!strcmp(list_get_front(msgq), "your_turn"))
 				status = 1;

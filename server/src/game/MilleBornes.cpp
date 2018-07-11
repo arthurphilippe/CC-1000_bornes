@@ -320,10 +320,11 @@ bool MilleBornes::useSpecial(Player &pl, Card &card)
 	return ret;
 }
 
-// TODO: Send msg to everyone
 void MilleBornes::_onVictory()
 {
 	for (auto &it : _players) {
+		dump(it.client.stream(), it.hand);
+		for (auto &pl : _players) dump(it.client.stream(), pl);
 		it.client.stream() << "winner " << _currentPlayer->client.id
 				   << std::endl;
 	}
