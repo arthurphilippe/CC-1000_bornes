@@ -36,6 +36,7 @@ static void show_msgq(list_t *msgq)
 	while ((tmp = list_iter_next(&iter))) {
 		printf(" - \"%s\"\n", tmp);
 	}
+	printf("%s\n", ":: Processing recieved messages...");
 }
 
 bool game_read(game_t *ga)

@@ -14,7 +14,7 @@ void game_proc_info(game_t *ga, list_t *msg)
 {
 	(void) ga;
 	if (list_get_size(msg)) {
-		dprintf(1, "--> Server says\n \'%s\'\n\n",
+		dprintf(1, " --> Server says\n \'%s\'\n\n",
 			(char *) list_get_front(msg));
 	}
 }

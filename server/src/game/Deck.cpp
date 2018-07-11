@@ -32,7 +32,9 @@ const std::unordered_map<Card, unsigned int> Deck::__cardDistribution{
 };
 
 Deck::Deck()
-	: _remainToDistribute(__cardDistribution), _rd(), _generator(_rd())
+	: _remainToDistribute(__cardDistribution),
+	  _generator(
+		  std::chrono::system_clock::now().time_since_epoch().count())
 {
 	while (!_remainToDistribute.empty()) {
 		auto idx = _generator();

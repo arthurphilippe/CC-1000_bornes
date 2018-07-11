@@ -8,6 +8,7 @@
 #ifndef DECK_HPP_
 #define DECK_HPP_
 
+#include <chrono>
 #include <list>
 #include <random>
 #include <unordered_map>
@@ -34,7 +35,6 @@ private:
 
 	std::list<Card> _cards;
 
-	std::random_device _rd;
 	std::mt19937 _generator;
 
 	static const std::unordered_map<Card, unsigned int>
