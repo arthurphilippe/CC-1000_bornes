@@ -10,13 +10,13 @@
 namespace game {
 
 const std::unordered_map<Card, unsigned int> Deck::__cardDistribution{
-	{Card::HazCarCrash, 3},
-	{Card::HazGasOutage, 3},
+	{Card::HazCarCrash, 6},
+	{Card::HazGasOutage, 6},
 	// {Card::HazFlatTire, 3},
 	// {Card::HazSpeedLimit, 4},
 	// {Card::HazRedLight, 5},
-	{Card::DefRepair, 6},
-	{Card::DefGas, 6},
+	{Card::DefRepair, 9},
+	{Card::DefGas, 9},
 	// {Card::DefSpareWheel, 6},
 	// {Card::DefEndOfLimit, 6},
 	// {Card::DefGreenLight, 14},

@@ -76,11 +76,24 @@ void MilleBornes::start()
 	_nextPlayer();
 }
 
+void MilleBornes::_ko(Player &pl)
+{
+	pl.client.stream() << "ko" << std::endl;
+	pl.ko += 1;
+	if (pl.ko >= 3) {
+		pl.ko = 0;
+		pl.client.stream() << "info :skiping your turn after having "
+				      "failed 3 or more commands"
+				   << std::endl;
+		_nextPlayer();
+	} else
+		_yourTurn();
+}
+
 void MilleBornes::runCmd(Player &pl, std::vector<std::string> &splitCmd)
 {
 	if (splitCmd.size() <= 1) {
-		pl.client.stream() << "ko" << std::endl;
-		_yourTurn();
+		_ko(pl);
 		return;
 	}
 
@@ -88,8 +101,7 @@ void MilleBornes::runCmd(Player &pl, std::vector<std::string> &splitCmd)
 	try {
 		nb = std::stoi(splitCmd[1]);
 	} catch (...) {
-		pl.client.stream() << "ko" << std::endl;
-		_yourTurn();
+		_ko(pl);
 		return;
 	}
 
@@ -102,8 +114,7 @@ void MilleBornes::runCmd(Player &pl, std::vector<std::string> &splitCmd)
 			auto id(std::stoul(splitCmd[2]));
 			ret = useCard(pl, pl.hand[nb], _getPlayer(id));
 		} catch (...) {
-			pl.client.stream() << "ko" << std::endl;
-			_yourTurn();
+			_ko(pl);
 			return;
 		}
 	} else if (splitCmd.front() == "discard") {
@@ -115,8 +126,7 @@ void MilleBornes::runCmd(Player &pl, std::vector<std::string> &splitCmd)
 		pl.hand[nb] = _deck.drawCard();
 		_nextPlayer();
 	} else {
-		pl.client.stream() << "ko" << std::endl;
-		_yourTurn();
+		_ko(pl);
 	}
 }
 
@@ -128,7 +138,7 @@ MilleBornes::Player &MilleBornes::_controlAccess(io::hdl::Client &handle)
 	} catch (...) {
 		if (_players.size() < MAX_PLAYER) {
 			Player tmpPl{
-				{}, handle, 0, Card::NONE, 0, 0, 0, 0, 0};
+				{}, handle, 0, 0, Card::NONE, 0, 0, 0, 0, 0};
 			tmpPl.hand.fill(Card::NONE);
 			_players.push_back(std::move(tmpPl));
 			_currentPlayer = _players.begin();

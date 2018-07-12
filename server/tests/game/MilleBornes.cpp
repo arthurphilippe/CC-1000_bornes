@@ -122,7 +122,7 @@ Test(MilleBornes, useDist)
 	DumbClient client(stor, proc, filedes[0]);
 
 	game::MilleBornes::Player pl{
-		{}, client, 0, game::Card::HazRedLight, 0, 0, 0, 0, 0};
+		{}, client, 0, 0, game::Card::HazRedLight, 0, 0, 0, 0, 0};
 	game::Card card = game::Card::Dst75kms;
 	cr_expect_not(game->useCard(pl, card));
 	cr_expect_eq(pl.distance, 0);
@@ -210,7 +210,7 @@ Test(MilleBornes, useDef)
 	DumbClient client(stor, proc, filedes[0]);
 
 	game::MilleBornes::Player pl{
-		{}, client, 0, game::Card::HazFlatTire, 0, 0, 0, 0, 0};
+		{}, client, 0, 0, game::Card::HazFlatTire, 0, 0, 0, 0, 0};
 
 	auto card = game::Card::DefGas;
 	cr_expect_not(game->useCard(pl, card));
@@ -243,9 +243,9 @@ Test(MilleBornes, useHaz)
 	DumbClient client(stor, proc, filedes[0]);
 
 	game::MilleBornes::Player pla{
-		{}, client, 0, game::Card::HazFlatTire, 0, 0, 0, 0, 0};
+		{}, client, 0, 0, game::Card::HazFlatTire, 0, 0, 0, 0, 0};
 	game::MilleBornes::Player plb{
-		{}, client, 0, game::Card::HazFlatTire, 0, 0, 0, 0, 0};
+		{}, client, 0, 0, game::Card::HazFlatTire, 0, 0, 0, 0, 0};
 
 	auto card = game::Card::HazCarCrash;
 	cr_expect_not(game->useCard(pla, card));
@@ -320,7 +320,7 @@ Test(MilleBornes, runCmd)
 	clientb.onCycle();
 
 	game::MilleBornes::Player pl{
-		{}, client, 0, game::Card::NONE, 0, 1, 0, 0, 0};
+		{}, client, 0, 0, game::Card::NONE, 0, 1, 0, 0, 0};
 	pl.hand[4] = game::Card::Dst75kms;
 	std::vector<std::string> splitmsg{
 		std::string{"use"}, std::string{"4"}};

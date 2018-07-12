@@ -27,6 +27,7 @@ public:
 		std::array<Card, 6> hand;
 		io::hdl::Client &client;
 		unsigned int distance;
+		unsigned int ko;
 		Card hazard;
 		bool speedlimited;
 		bool acePilot;
@@ -73,6 +74,7 @@ private:
 		_currentPlayer->client.stream() << "your_turn" << std::endl;
 		_currentPlayer->client.dumpStream();
 	}
+	void _ko(Player &pl);
 
 	void _quit(unsigned long id);
 	void _end();
