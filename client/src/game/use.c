@@ -30,7 +30,7 @@ bool game_use_card(game_t *ga, unsigned int idx)
 	return (ret);
 }
 
-static player_state_t *find_plstate(game_t *ga, unsigned long *id)
+static playerstate_t *find_plstate(game_t *ga, unsigned long *id)
 {
 	for (unsigned int i = 0; i < ga->ga_player_nb; i += 1) {
 		if (ga->ga_players[i].ps_id == *id) {
@@ -43,7 +43,7 @@ static player_state_t *find_plstate(game_t *ga, unsigned long *id)
 
 bool game_use_attack_by_id(game_t *ga, unsigned int idx, unsigned long id)
 {
-	player_state_t *ps = find_plstate(ga, &id);
+	playerstate_t *ps = find_plstate(ga, &id);
 
 	if (!ps) {
 		dprintf(2, "%s %ld\n", " error: cannot find id:", id);
@@ -56,7 +56,7 @@ bool game_use_attack(game_t *ga, unsigned int idx, unsigned int idx_target)
 {
 	bool ret = true;
 	card_t card = ga->ga_hand[idx];
-	player_state_t *ps = &ga->ga_players[idx % 6];
+	playerstate_t *ps = &ga->ga_players[idx % 6];
 
 	if (ps->ps_incident != NONE) {
 		dprintf(2, "%s\n",

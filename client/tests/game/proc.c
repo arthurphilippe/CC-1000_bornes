@@ -106,7 +106,7 @@ Test(GameProc, PlayerState)
 	cr_expect_eq(ga->ga_id, 12, "got %ld instead of %ld", ga->ga_id, 12);
 
 	game_proc(ga, "playerstate 7 525 2 1 0 1 0 0");
-	player_state_t *ps = &ga->ga_players[0];
+	playerstate_t *ps = &ga->ga_players[0];
 
 	cr_expect_eq(ps->ps_id, 7);
 	cr_expect_eq(ps->ps_dist, 525);

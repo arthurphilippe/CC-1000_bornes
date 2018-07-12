@@ -21,7 +21,7 @@ static void set_bool(bool *val, const char *src) { *val = (src[0] == '1'); }
  */
 void game_proc_playerstate(game_t *ga, list_t *msg)
 {
-	player_state_t *ps;
+	playerstate_t *ps;
 	unsigned long id;
 
 	if (msg->l_size != 8 || ga->ga_player_nb >= 5) return;

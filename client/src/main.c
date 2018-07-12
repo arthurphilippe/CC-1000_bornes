@@ -9,24 +9,30 @@
 #include "game.h"
 #include "strat.h"
 
-int main(int ac, char **av)
+static int start(const char *arg)
 {
 	game_t *ga;
-	if (ac != 2) {
-		dprintf(2, "%s\n", "too much or to few arguments");
-		return (84);
-	}
+	int ret = 0;
+
 	ga = game_create();
-	game_connect(ga, av[1]);
-	if (!ga->ga_live) {
-		dprintf(2, "%s\n", "failed to connect, exiting!");
-		game_delete(ga);
-		return (84);
-	}
-	dprintf(ga->ga_socketfd, "%s\n", "hello jafar");
-	while (game_read(ga)) {
-		dprintf(2, "loop\n");
+	game_connect(ga, arg);
+	if (!ga->ga_live) ret = 84;
+	while (ga->ga_live && game_read(ga)) {
 		strat_select_and_run(ga);
 	}
 	game_delete(ga);
+	return (ret);
+}
+
+int main(int ac, char **av)
+{
+	int ret;
+
+	if (ac != 2) {
+		dprintf(2, "%s\n", "too much or to few arguments");
+		ret = 84;
+	} else {
+		ret = start(av[1]);
+	}
+	return (ret);
 }

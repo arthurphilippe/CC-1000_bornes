@@ -46,6 +46,7 @@ bool game_read(game_t *ga)
 	int ret;
 
 	if (!msgq) return false;
+	printf("\n%s\n\n", "*** Waiting ***");
 	printf("%s\n", ":: Waiting for server messages...");
 	while (!status && (ret = read_and_fill_queue(ga, msgq))) {
 		show_msgq(msgq);
@@ -58,5 +59,6 @@ bool game_read(game_t *ga)
 	}
 	if (ret <= 0) status = -1;
 	list_destroy(msgq);
+	if (status == 1) printf("\n%s\n\n", "*** Player's turn ***");
 	return ((status == 1));
 }

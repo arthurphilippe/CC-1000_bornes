@@ -8,7 +8,7 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-#include "player_state.h"
+#include "playerstate.h"
 
 #ifndef NULL
 #	define NULL (void *) 0
@@ -16,8 +16,8 @@
 
 // Game structure
 typedef struct s_game {
-	player_state_t ga_players[6];
-	player_state_t ga_self;
+	playerstate_t ga_players[5];
+	playerstate_t ga_self;
 	card_t ga_hand[6];
 	unsigned long ga_id;
 	unsigned long ga_id_winner;

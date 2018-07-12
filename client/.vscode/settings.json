@@ -3,7 +3,7 @@
 	"files.associations": {
 		"game.h": "c",
 		"assert.h": "c",
-		"player_state.h": "c",
+		"playerstate.h": "c",
 		"array": "c",
 		"list": "c",
 		"vector": "c",
