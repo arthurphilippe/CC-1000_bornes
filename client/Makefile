@@ -35,8 +35,6 @@ SRCS		=	src/list/list.c			\
 			src/game/proc/proc.c		\
 			src/game/read.c			\
 			src/game/proc/winner.c		\
-			src/strat/find_best_dist.c	\
-			src/strat/select_and_run.c	\
 
 OBJ_MAIN	=	$(MAIN:.c=.o)
 
