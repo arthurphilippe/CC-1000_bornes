@@ -25,6 +25,7 @@ typedef struct s_game {
 	int ga_socketfd;
 	bool ga_live;
 	bool ga_carry;
+	bool ga_ready;
 } game_t;
 
 // Prototypes
@@ -33,8 +34,7 @@ void game_delete(void *ptr);
 int game_connect(game_t *ga, const char *arg_str);
 bool game_read(game_t *ga);
 bool game_use_card(game_t *ga, unsigned int idx);
-bool game_use_attack(game_t *ga, unsigned int idx, unsigned int idx_target);
-bool game_use_attack_by_id(game_t *ga, unsigned int idx, unsigned long id);
+bool game_use_attack(game_t *ga, unsigned int idx, unsigned long id_target);
 bool game_discard_card(game_t *ga, unsigned int idx);
 
 #endif /* !GAME_H_ */

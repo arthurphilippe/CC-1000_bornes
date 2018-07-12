@@ -24,14 +24,16 @@ public:
 		  _stor(stor),
 		  _msgProcessor(nullptr),
 		  _fd(fd),
-		  _live(true)
+		  _live(true),
+		  _eof(false)
 	{}
 	Client(Selector &stor, std::shared_ptr<IMsgProcessor> &proc, int fd)
 		: id(__id++),
 		  _stor(stor),
 		  _msgProcessor(proc),
 		  _fd(fd),
-		  _live(true)
+		  _live(true),
+		  _eof(false)
 	{}
 
 	~Client();
@@ -52,7 +54,7 @@ public:
 	virtual std::ostream &stream() noexcept { return _oss; }
 	virtual void dumpStream()
 	{
-		if (!_oss.str().empty() && _live) {
+		if (!_oss.str().empty() && _live && !_eof) {
 			dprintf(_fd, "%s", _oss.str().c_str());
 			_oss.str("");
 		}
@@ -65,6 +67,7 @@ protected:
 	std::shared_ptr<IMsgProcessor> _msgProcessor;
 	int _fd;
 	bool _live;
+	bool _eof;
 	std::list<std::string> _receivedMsgs;
 
 	std::ostringstream _oss;

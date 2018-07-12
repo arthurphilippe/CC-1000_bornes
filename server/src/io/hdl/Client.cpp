@@ -37,6 +37,7 @@ void Client::onRead()
 		tools::Parsing::fillList(_receivedMsgs, buff, "\n\r");
 	} else {
 		_receivedMsgs.push_front("quit");
+		_eof = true;
 	}
 }
 

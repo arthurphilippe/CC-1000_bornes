@@ -20,6 +20,7 @@ namespace game {
 
 constexpr auto MAX_PLAYER(6);
 constexpr auto MIN_PLAYER(6);
+constexpr auto MAX_CYCLE(1500);
 
 class MilleBornes : public io::hdl::IMsgProcessor {
 public:
@@ -64,7 +65,11 @@ private:
 			std::advance(_currentPlayer, 1);
 		if (_currentPlayer == _players.end())
 			_currentPlayer = _players.begin();
-		_yourTurn();
+		_cycleCount += 1;
+		if (_cycleCount < MAX_CYCLE)
+			_yourTurn();
+		else
+			_end();
 	}
 	void _yourTurn()
 	{
@@ -115,6 +120,7 @@ private:
 	bool _live;
 	bool _started;
 	std::list<Player>::iterator _currentPlayer;
+	unsigned int _cycleCount;
 };
 
 } // namespace game

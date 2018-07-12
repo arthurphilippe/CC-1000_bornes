@@ -59,6 +59,9 @@ bool game_read(game_t *ga)
 	}
 	if (ret <= 0) status = -1;
 	list_destroy(msgq);
-	if (status == 1) printf("\n%s\n\n", "*** Player's turn ***");
+	if (status == 1) {
+		printf("\n%s\n\n", "*** Player's turn ***");
+		ga->ga_ready = true;
+	}
 	return ((status == 1));
 }

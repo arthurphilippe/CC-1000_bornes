@@ -28,7 +28,8 @@ MilleBornes::MilleBornes()
 	  _players(),
 	  _live(true),
 	  _started(false),
-	  _currentPlayer(_players.begin())
+	  _currentPlayer(_players.begin()),
+	  _cycleCount(0)
 {}
 
 MilleBornes::~MilleBornes() {}
