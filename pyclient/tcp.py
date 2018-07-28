@@ -36,7 +36,7 @@ if __name__ == '__main__':
 		sys.exit(1)
 
 	try:
-		connect(s, "192.168.2.1", 8080)
+		connect(s, "www.google.fr", 80)
 		print('Socket Created')
 	except RuntimeError as error:
 		print(error, sys.stderr)

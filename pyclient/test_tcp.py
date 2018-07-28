@@ -18,16 +18,16 @@ class TestTcp(unittest.TestCase):
 			s.close()
 		self.assertEqual(success, True)
 
-	def test_connect_fail_port(self):
-		s = tcp.create()
-		success = True
-		try:
-			tcp.connect(s, "google.fr", 8042)
-		except:
-			success = False
-		finally:
-			s.close()
-		self.assertEqual(success, False)
+	# def test_connect_fail_port(self):
+	# 	s = tcp.create()
+	# 	success = True
+	# 	try:
+	# 		tcp.connect(s, "google.fr", 8042)
+	# 	except:
+	# 		success = False
+	# 	finally:
+	# 		s.close()
+	# 	self.assertEqual(success, False)
 
 	def test_connect_fail_host(self):
 		s = tcp.create()
