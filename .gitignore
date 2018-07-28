@@ -34,3 +34,4 @@
 server/game_server
 client/game_client
 subject.md
+*.pyc
