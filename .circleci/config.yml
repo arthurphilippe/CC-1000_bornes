@@ -132,9 +132,9 @@ jobs:
             . venv/bin/activate
             python -m pytest --junitxml=test-reports/report.xml
 
-      - store_artifacts:
+      - store_test_results:
           path: pyclient/test-reports
-          destination: test-reports
+          destination: tests
 
 
 workflows:
