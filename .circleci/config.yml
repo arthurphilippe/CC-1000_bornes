@@ -103,10 +103,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "requirements.txt" }}
+          - v1-dependencies-{{ checksum "pyclient/requirements.txt" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-          working_directory: ~/project/pyclient
 
       - run:
           name: install dependencies
@@ -117,9 +116,8 @@ jobs:
             pip install -r requirements.txt
 
       - save_cache:
-          working_directory: ~/project/pyclient
           paths:
-            - ./venv
+            - ./pyclient/venv
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
       # run tests!
