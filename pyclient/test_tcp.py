@@ -2,6 +2,14 @@ import unittest
 import tcp
 
 
+class dummySock:
+    def __init__(self):
+        pass
+
+    def recv(self, count):
+        return 'I like trains\nkappa\n\rwa kawai\n\r' + str(count)
+
+
 class TestTcp(unittest.TestCase):
     def test_create(self):
         s = tcp.create()
@@ -40,6 +48,15 @@ class TestTcp(unittest.TestCase):
         finally:
             s.close()
         self.assertEqual(success, False)
+
+
+class TestQueue(unittest.TestCase):
+    def test_fill(self):
+        queue = []
+        self.assertEqual(len(queue), 0)
+        sock = dummySock()
+        queue = tcp.fillQueue(sock, queue)
+        self.assertEqual(queue[0], 'I like trains')
 
 
 if __name__ == '__main__':

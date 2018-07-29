@@ -1,0 +1,6 @@
+[
+  "test_tcp.py::TestTcp::test_connect",
+  "test_tcp.py::TestTcp::test_connect_fail_host",
+  "test_tcp.py::TestTcp::test_create",
+  "test_tcp.py::TestQueue::test_fill"
+]

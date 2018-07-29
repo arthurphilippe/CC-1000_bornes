@@ -5,13 +5,16 @@
 		"-s",
 		".",
 		"-p",
-		"test_*.py"
+		"test*.py"
 	],
-	"python.unitTest.pyTestEnabled": false,
+	"python.unitTest.pyTestEnabled": true,
 	"python.unitTest.nosetestsEnabled": false,
-	"python.unitTest.unittestEnabled": true,
+	"python.unitTest.unittestEnabled": false,
 	"python.linting.pylintEnabled": false,
 	"python.linting.pep8Enabled": true,
 	"python.linting.enabled": true,
 	"editor.formatOnSave": true,
+	"python.unitTest.pyTestArgs": [
+		"."
+	],
 }

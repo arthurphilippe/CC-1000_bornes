@@ -31,6 +31,12 @@ def connect(sock, hostname="0.0.0.0", port=4242):
     print('Socket Connected to ' + hostname + ' on ip ' + remote_ip)
 
 
+def fillQueue(sock, queue):
+    reply = sock.recv(2048)
+    reply.strip('\r')
+    return queue + reply.split('\n')
+
+
 if __name__ == '__main__':
     if len(sys.argv) < 3:
         sys.exit(1)
