@@ -133,8 +133,7 @@ jobs:
             python -m pytest --junitxml=test-reports/report.xml
 
       - store_artifacts:
-          working_directory: ~/project/pyclient
-          path: test-reports
+          path: pyclient/test-reports
           destination: test-reports
 
 
