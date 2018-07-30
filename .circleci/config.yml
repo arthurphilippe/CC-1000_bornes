@@ -108,7 +108,7 @@ jobs:
           - v1-dependencies-
 
       - run:
-          name: install dependencies
+          name: Install dependencies
           working_directory: ~/project/pyclient
           command: |
             python3 -m venv venv
@@ -127,10 +127,10 @@ jobs:
       # https://nose.readthedocs.io
       - run:
           working_directory: ~/project/pyclient
-          name: run tests
+          name: Run tests
           command: |
             . venv/bin/activate
-            python -m pytest --junitxml=test-reports/report.xml
+            python -m pytest --verbose --junitxml=test-reports/report.xml
 
       - store_test_results:
           path: pyclient/test-reports
