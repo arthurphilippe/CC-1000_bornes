@@ -12,3 +12,31 @@ def test_Game_create():
     for player in gm.players:
         assert player.dist is 0
         assert player.incident is Game.Card.NONE
+
+
+def test_Game_procLsCards_normal():
+    gm = Game.Game()
+    gm.procLsCards(['20', '2', '0', '1', '14', '6'])
+    assert gm.hand[0] is Game.Card.NONE
+    assert gm.hand[1] is Game.Card.HazFlatTire
+    assert gm.hand[2] is Game.Card.HazCarCrash
+
+
+def test_Game_procLsCards_error_count():
+    gm = Game.Game()
+    gm.procLsCards(['20', '2', '0', '1', '14'])
+    for card in gm.hand:
+        assert card is Game.Card.NONE
+
+
+def test_Game_procLsCards_error_content():
+    gm = Game.Game()
+    gm.procLsCards(['20', '45', '0', 'kappa', '14', '6'])
+    assert gm.hand[1] is Game.Card.NONE
+    assert gm.hand[3] is Game.Card.NONE
+
+
+def test_Game_procKO():
+    gm = Game.Game()
+    gm.procKO([])
+    assert gm.carry is False

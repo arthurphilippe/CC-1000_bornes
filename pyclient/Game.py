@@ -50,6 +50,7 @@ class Game:
         self.players *= 6
         self.connected = False
         self.live = True
+        self.carry = True
         if len(host) and len(port):
             self.connect()
 
@@ -64,3 +65,20 @@ class Game:
 
     def procID(self, args):
         self.id = int(args[0])
+
+    def procKO(self, args):
+        self.carry = False
+        print(' !-> Your last action failed')
+
+    def procLsCards(self, args):
+        if len(args) is 6:
+            index = 0
+            for card in args:
+                try:
+                    if card.isdigit():
+                        self.hand[index] = Card(int(card))
+                    else:
+                        self.hand[index] = Card.NONE
+                except:
+                    self.hand[index] = Card.NONE
+                index += 1
