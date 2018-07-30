@@ -10,7 +10,7 @@ class dummySock:
         return 'I like trains\nkappa\n\rwa kawai\n\r' + str(count)
 
 
-class TestTcp(unittest.TestCase):
+class Socket(unittest.TestCase):
     def test_create(self):
         s = tcp.create()
         self.assertNotEqual(s.fileno, -1)
@@ -50,7 +50,7 @@ class TestTcp(unittest.TestCase):
         self.assertEqual(success, False)
 
 
-class TestQueue(unittest.TestCase):
+class Queue(unittest.TestCase):
     def test_fill(self):
         queue = []
         self.assertEqual(len(queue), 0)
