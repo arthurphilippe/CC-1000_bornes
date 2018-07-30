@@ -3,15 +3,12 @@ import Game
 
 def test_Game_create():
     gm = Game.Game()
-    assert gm.id is 0
+    assert gm.state.uid is 0
     assert gm.connected is False
     assert len(gm.hand) is 6
     for card in gm.hand:
         assert card is Game.Card.NONE
-    assert len(gm.players) is 6
-    for player in gm.players:
-        assert player.dist is 0
-        assert player.incident is Game.Card.NONE
+    assert len(gm.players) is 0
 
 
 def test_Game_procLsCards_normal():
@@ -40,3 +37,10 @@ def test_Game_procKO():
     gm = Game.Game()
     gm.procKO([])
     assert gm.carry is False
+
+
+def test_Game_procPlayerState():
+    gm = Game.Game()
+    gm.state.uid = 12
+    gm.procPlayerState(['12', '450', '20', '1', '0', '1', '0', '1'])
+    assert gm.state.limited is True

@@ -31,23 +31,23 @@ class Card(Enum):
 
 
 class PlayerState:
-    uid = 0
-    dist = 0
-    incident = Card.NONE
-    limited = False
-    ace = False
-    tank = False
-    punctureProof = False
-    prioritised = False
+    def __init__(self):
+        self.uid = 0
+        self.dist = 0
+        self.incident = Card.NONE
+        self.limited = False
+        self.ace = False
+        self.tank = False
+        self.punctureProof = False
+        self.prioritised = False
 
 
 class Game:
     def __init__(self, host="", port=""):
-        self.id = 0
         self.hand = [Card.NONE]
         self.hand *= 6
-        self.players = [PlayerState()]
-        self.players *= 6
+        self.players = []
+        self.state = PlayerState()
         self.connected = False
         self.live = True
         self.carry = True
@@ -82,3 +82,24 @@ class Game:
                 except:
                     self.hand[index] = Card.NONE
                 index += 1
+
+    def __procPlayerStateExtract(self, args):
+        state = PlayerState()
+        state.uid = int(args[0])
+        state.dist = int(args[1])
+        state.incident = Card(int(args[2]))
+        state.limited = bool(args[3])
+        state.ace = bool(args[4])
+        state.tank = bool(args[5])
+        state.punctureProof = bool(args[6])
+        state.prioritised = bool(args[7])
+        return state
+
+    def procPlayerState(self, args):
+        if len(args) is 8:
+            state = self.__procPlayerStateExtract(args)
+            if state.uid is self.state.uid:
+                self.state = state
+            else:
+                if len(self.players) < 5:
+                    self.players.append(state)
