@@ -62,6 +62,13 @@ def test_Game_procWinner():
     assert gm.winnerUid == 7845
 
 
+def test_Game_procForfeit():
+    gm = Game.Game()
+    gm.proc('forfeit')
+    assert gm.live is False
+    assert gm.winnerUid == 0
+
+
 def test_Game_proc():
     gm = Game.Game()
 
