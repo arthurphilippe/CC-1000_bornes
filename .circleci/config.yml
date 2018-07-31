@@ -130,14 +130,14 @@ jobs:
           name: Run tests
           command: |
             . venv/bin/activate
-            python -m pytest --verbose --junitxml=test-reports/report.xml --cov=.
+            python -m pytest --verbose --junitxml=test-reports/report.xml --cov=. --cov-report=html
 
       - store_test_results:
           path: pyclient/test-reports
           destination: tests
 
       - store_artifacts:
-          path: ~/project/pyclient/htmlcov
+          path: pyclient/htmlcov
           destination: coverage
 
 
