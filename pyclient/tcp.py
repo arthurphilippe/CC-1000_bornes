@@ -33,8 +33,16 @@ def connect(sock, hostname="0.0.0.0", port=4242):
 
 def fillQueue(sock, queue):
     reply = sock.recv(2048)
-    reply.strip('\r')
-    return queue + reply.split('\n')
+    if len(reply) is not 0:
+        splitReply = reply.split('\n')
+        for i in range(len(splitReply)):
+            splitReply[i] = splitReply[i].strip('\r')
+        for i in range(len(splitReply)):
+            if len(splitReply[i]) is 0:
+                splitReply.pop(i)
+    else:
+        splitReply = ['quit']
+    return queue + splitReply
 
 
 if __name__ == '__main__':

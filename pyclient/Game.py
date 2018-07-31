@@ -30,6 +30,12 @@ class Card(Enum):
     NONE = 20
 
 
+def strtobool(string):
+    if string == '1':
+        return True
+    return False
+
+
 class PlayerState:
     def __init__(self):
         self.uid = 0
@@ -48,11 +54,23 @@ class Game:
         self.hand *= 6
         self.players = []
         self.state = PlayerState()
+        self.msgQueue = []
         self.connected = False
         self.live = True
         self.carry = True
+        self.winnerUid = 0
         if len(host) and len(port):
             self.connect()
+
+        self.__processors = {"id": lambda args: self.procID(args),
+                             'playerstate': lambda args:
+                             self.procPlayerState(args),
+                             'lscards': lambda args: self.procLsCards(args),
+                             'ok': lambda args: self.procOK(args),
+                             'ko': lambda args: self.procKO(args),
+                             'forfeit': lambda args: self.procWinner(args),
+                             'winner': lambda args: self.procWinner(args)
+                             }
 
     def connect(host, port):
         self.__sock = tcp.create()
@@ -60,15 +78,33 @@ class Game:
         self.connected = True
 
     def read(self):
+        status = 0
         if self.connected:
-            pass
+            tcp.fillQueue(self.sock, self.msgQueue)
+        while len(self.msgQueue) is not 0 and status is 0:
+            msg = self.msgQueue.pop(0)
+            print('processing: ', msg)
+            if msg is 'info':
+                print('info from server', msg)
+            elif msg is 'your_turn':
+                status = 1
+            elif msg is 'quit':
+                status = -1
+
+        if status is 1:
+            return True
+        else:
+            return False
 
     def procID(self, args):
-        self.id = int(args[0])
+        self.state.uid = int(args[0])
 
     def procKO(self, args):
         self.carry = False
         print(' !-> Your last action failed')
+
+    def procOK(self, args):
+        self.carry = True
 
     def procLsCards(self, args):
         if len(args) is 6:
@@ -88,11 +124,11 @@ class Game:
         state.uid = int(args[0])
         state.dist = int(args[1])
         state.incident = Card(int(args[2]))
-        state.limited = bool(args[3])
-        state.ace = bool(args[4])
-        state.tank = bool(args[5])
-        state.punctureProof = bool(args[6])
-        state.prioritised = bool(args[7])
+        state.limited = strtobool(args[3])
+        state.ace = strtobool(args[4])
+        state.tank = strtobool(args[5])
+        state.punctureProof = strtobool(args[6])
+        state.prioritised = strtobool(args[7])
         return state
 
     def procPlayerState(self, args):
@@ -103,3 +139,15 @@ class Game:
             else:
                 if len(self.players) < 5:
                     self.players.append(state)
+
+    def procWinner(self, args):
+        if len(args) is 0:
+            print(' --> Everyone but you has declared forfeit.')
+        self.live = False
+
+    def proc(self, msg):
+        try:
+            args = msg.split(' ')
+            self.__processors[args[0]](args[1:])
+        except Exception as error:
+            print(error)

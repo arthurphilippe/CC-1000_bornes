@@ -4,10 +4,14 @@ import tcp
 
 class dummySock:
     def __init__(self):
-        pass
+        self.count = 0
 
     def recv(self, count):
-        return 'I like trains\nkappa\n\rwa kawai\n\r' + str(count)
+        if self.count is 0:
+            self.count = 1
+            return 'I like trains\nkappa\n\rwa kawai\n\r'
+        else:
+            return ''
 
 
 class Socket(unittest.TestCase):
@@ -57,6 +61,19 @@ class Queue(unittest.TestCase):
         sock = dummySock()
         queue = tcp.fillQueue(sock, queue)
         self.assertEqual(queue[0], 'I like trains')
+        self.assertEqual(queue[1], 'kappa')
+        self.assertEqual(queue[2], 'wa kawai')
+
+    def test_empty_quit(self):
+        queue = []
+        self.assertEqual(len(queue), 0)
+        sock = dummySock()
+        queue = tcp.fillQueue(sock, queue)
+        queue = tcp.fillQueue(sock, queue)
+        self.assertEqual(queue[0], 'I like trains')
+        self.assertEqual(queue[1], 'kappa')
+        self.assertEqual(queue[2], 'wa kawai')
+        self.assertEqual(queue[3], 'quit')
 
 
 if __name__ == '__main__':

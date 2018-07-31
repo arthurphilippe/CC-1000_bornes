@@ -44,3 +44,19 @@ def test_Game_procPlayerState():
     gm.state.uid = 12
     gm.procPlayerState(['12', '450', '20', '1', '0', '1', '0', '1'])
     assert gm.state.limited is True
+    assert gm.state.ace is False
+
+
+def test_Game_proc():
+    gm = Game.Game()
+
+    gm.proc('id 12')
+    assert gm.state.uid is 12
+    gm.proc('playerstate 12 450 20 1 0 1 0 1')
+    gm.proc('your_turn')
+    gm.proc('info :kappa')
+    assert gm.state.limited is True
+    gm.proc('playerstate 12 450 20 0 0 1 0 1')
+    assert gm.state.limited is False
+    gm.proc('ko')
+    assert gm.carry is False
