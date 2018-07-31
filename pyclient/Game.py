@@ -143,6 +143,8 @@ class Game:
     def procWinner(self, args):
         if len(args) is 0:
             print(' --> Everyone but you has declared forfeit.')
+        else:
+            self.winnerUid = int(args[0])
         self.live = False
 
     def proc(self, msg):

@@ -39,6 +39,14 @@ def test_Game_procKO():
     assert gm.carry is False
 
 
+def test_Game_procOK():
+    gm = Game.Game()
+    gm.procKO([])
+    assert gm.carry is False
+    gm.procOK([])
+    assert gm.carry is True
+
+
 def test_Game_procPlayerState():
     gm = Game.Game()
     gm.state.uid = 12
@@ -47,11 +55,18 @@ def test_Game_procPlayerState():
     assert gm.state.ace is False
 
 
+def test_Game_procWinner():
+    gm = Game.Game()
+    gm.proc('winner 7845')
+    assert gm.live is False
+    assert gm.winnerUid == 7845
+
+
 def test_Game_proc():
     gm = Game.Game()
 
     gm.proc('id 12')
-    assert gm.state.uid is 12
+    assert gm.state.uid == 12
     gm.proc('playerstate 12 450 20 1 0 1 0 1')
     gm.proc('your_turn')
     gm.proc('info :kappa')

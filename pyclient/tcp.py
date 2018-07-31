@@ -46,6 +46,7 @@ def fillQueue(sock, queue):
 
 
 if __name__ == '__main__':
+    print('tcp module: self test')
     if len(sys.argv) < 3:
         sys.exit(1)
     host = sys.argv[1]
