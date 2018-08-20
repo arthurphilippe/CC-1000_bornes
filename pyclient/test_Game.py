@@ -86,3 +86,27 @@ def test_Game_proc():
     assert gm.players[0].dist is 125
     gm.proc('ko')
     assert gm.carry is False
+
+
+def test_Game_connect_success():
+    gm = Game.Game()
+
+    success = True
+    try:
+        gm.connect("google.fr", 80)
+    except:
+        success = False
+    assert gm.connected is True
+    assert success is True
+
+
+def test_Game_connect_fail():
+    gm = Game.Game()
+
+    success = False
+    try:
+        gm.connect("google.frarre", 80)
+    except:
+        success = True
+    assert gm.connected is False
+    assert success is True

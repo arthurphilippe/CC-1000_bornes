@@ -72,7 +72,7 @@ class Game:
                              'winner': lambda args: self.procWinner(args)
                              }
 
-    def connect(host, port):
+    def connect(self, host, port):
         self.__sock = tcp.create()
         tcp.connect(self.__sock, host, int(port))
         self.connected = True
