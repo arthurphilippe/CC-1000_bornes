@@ -147,9 +147,28 @@ class Game:
             self.winnerUid = int(args[0])
         self.live = False
 
+    def useCard(self, cardPos):
+        if self.live is True and self.connected is True:
+            string = 'use {}\n'.format(cardPos)
+            print(':: sending: \'{}\''.format(string))
+            return string
+
+    def useAttack(self, cardPos, idTarget):
+        if self.live is True and self.connected is True:
+            string = 'use {} {}\n'.format(cardPos, idTarget)
+            print(':: sending: \'{}\''.format(string))
+            return string
+
     def proc(self, msg):
         try:
             args = msg.split(' ')
             self.__processors[args[0]](args[1:])
         except Exception as error:
             print(error)
+
+
+gm = Game()
+gm.live = True
+gm.connected = False
+
+ret = gm.useCard(2)
