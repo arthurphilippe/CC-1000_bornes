@@ -9,9 +9,9 @@ class dummySock:
     def recv(self, count):
         if self.count is 0:
             self.count = 1
-            return 'I like trains\nkappa\n\rwa kawai\n\r'
+            return b'I like trains\nkappa\n\rwa kawai\n\r'
         else:
-            return ''
+            return b''
 
 
 class Socket(unittest.TestCase):

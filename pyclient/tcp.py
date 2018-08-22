@@ -33,6 +33,7 @@ def connect(sock, hostname="0.0.0.0", port=4242):
 
 def fillQueue(sock, queue):
     reply = sock.recv(2048)
+    reply = reply.decode('UTF-8')
     if len(reply) is not 0:
         splitReply = reply.split('\n')
         for i in range(len(splitReply)):

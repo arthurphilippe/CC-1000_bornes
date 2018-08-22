@@ -60,7 +60,7 @@ class Game:
         self.carry = True
         self.winnerUid = 0
         if len(host) and len(port):
-            self.connect()
+            self.connect(host, port)
 
         self.__processors = {"id": lambda args: self.procID(args),
                              'playerstate': lambda args:
@@ -79,17 +79,22 @@ class Game:
 
     def read(self):
         status = 0
-        if self.connected:
-            tcp.fillQueue(self.sock, self.msgQueue)
-        while len(self.msgQueue) is not 0 and status is 0:
-            msg = self.msgQueue.pop(0)
-            print('processing: ', msg)
-            if msg is 'info':
-                print('info from server', msg)
-            elif msg is 'your_turn':
-                status = 1
-            elif msg is 'quit':
-                status = -1
+        while status is 0:
+            if self.connected:
+                self.msgQueue = tcp.fillQueue(self.__sock, self.msgQueue)
+            while len(self.msgQueue) is not 0:
+                msg = self.msgQueue.pop(0)
+                print('processing: ', msg)
+                if msg[:4] == 'info':
+                    print('info from server', msg)
+                elif msg == 'your_turn':
+                    print('Your turn!')
+                    status = 1
+                elif msg == 'quit':
+                    print('exiting')
+                    status = -1
+                else:
+                    self.proc(msg)
 
         if status is 1:
             return True
@@ -151,12 +156,21 @@ class Game:
         if self.live is True and self.connected is True:
             string = 'use {}\n'.format(cardPos)
             print(':: sending: \'{}\''.format(string))
+            self.__sock.sendall(str.encode(string))
+            return string
+
+    def discardCard(self, cardPos):
+        if self.live is True and self.connected is True:
+            string = 'discard {}\n'.format(cardPos)
+            print(':: sending: \'{}\''.format(string))
+            self.__sock.sendall(str.encode(string))
             return string
 
     def useAttack(self, cardPos, idTarget):
         if self.live is True and self.connected is True:
             string = 'use {} {}\n'.format(cardPos, idTarget)
             print(':: sending: \'{}\''.format(string))
+            self.__sock.sendall(str.encode(string))
             return string
 
     def proc(self, msg):
@@ -165,10 +179,3 @@ class Game:
             self.__processors[args[0]](args[1:])
         except Exception as error:
             print(error)
-
-
-gm = Game()
-gm.live = True
-gm.connected = False
-
-ret = gm.useCard(2)
