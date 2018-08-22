@@ -110,25 +110,3 @@ def test_Game_connect_fail():
         success = True
     assert gm.connected is False
     assert success is True
-
-
-def test_Game_useCard():
-    gm = Game.Game()
-
-    ret = gm.useCard(2)
-    assert ret != 'use 2\n'
-    gm.live = True
-    gm.connected = True
-    ret = gm.useCard(2)
-    assert ret == 'use 2\n'
-
-
-def test_Game_useAttack():
-    gm = Game.Game()
-
-    ret = gm.useAttack(2, 1)
-    assert ret != 'use 2 1\n'
-    gm.live = True
-    gm.connected = True
-    ret = gm.useAttack(2, 1)
-    assert ret == 'use 2 1\n'

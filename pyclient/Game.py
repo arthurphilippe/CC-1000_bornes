@@ -150,6 +150,10 @@ class Game:
             print(' --> Everyone but you has declared forfeit.')
         else:
             self.winnerUid = int(args[0])
+            if self.state.uid is self.winnerUid:
+                print(' --> You won!')
+            else:
+                print(' --> You lost.')
         self.live = False
 
     def useCard(self, cardPos):
