@@ -6,6 +6,7 @@
 */
 
 #include "Client.hpp"
+#include <iostream>
 #include <unistd.h>
 #include "io/Selector.hpp"
 #include "tools/Parsing.hpp"
@@ -18,12 +19,18 @@ Client::~Client() { close(_fd); }
 
 void Client::onCycle()
 {
+	if (_eof) _live = false;
 	while (!_receivedMsgs.empty()) {
 		if (_msgProcessor && !_msgProcessor->live())
 			_msgProcessor.reset();
 		if (_msgProcessor && _msgProcessor->live())
 			_msgProcessor->processMsg(
 				*this, _receivedMsgs.front());
+		if (!_msgProcessor) {
+			if (_receivedMsgs.front() == "quit") _live = false;
+			this->stream() << _receivedMsgs.front() << std::endl;
+			this->dumpStream();
+		}
 		_receivedMsgs.pop_front();
 	}
 }
@@ -36,6 +43,7 @@ void Client::onRead()
 		buff[r] = 0;
 		tools::Parsing::fillList(_receivedMsgs, buff, "\n\r");
 	} else {
+		std::cout << "quit" << std::endl;
 		_receivedMsgs.push_front("quit");
 		_eof = true;
 	}
