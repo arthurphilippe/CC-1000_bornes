@@ -8,8 +8,16 @@ RUN dnf -y update && dnf -y install gcc gcc-c++ make\
 
 RUN /root/install_criterion.sh
 
+WORKDIR /tmp
+
+RUN wget https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.gz && tar xzvf boost_1_70_0.tar.gz && cp -r /tmp/boost_1_70_0/boost /usr/include/
+
 WORKDIR /app
 
 COPY . /app
 
-RUN make
+RUN g++ async_tcp_echo_server.cpp -lpthread && make && make tests
+
+CMD [ "game_server", "8080" ]
+
+EXPOSE 8080
